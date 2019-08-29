@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { get, post } from '@/util/api'
+import { get, post } from '@/request/api'
 export default {
   components: {},
   data() {
@@ -58,8 +58,6 @@ export default {
           password: this.password
         }).then(msg => {
           console.log(msg);
-        }).catch(err => {
-          throw err
         })
       }
     }

@@ -2,6 +2,8 @@ import axios from 'axios';
 import router from './../router/index';
 import Cookie from 'js-cookie'
 import qs from 'qs'; //传给后台的数据为form格式
+import { Message } from 'iview'
+import 'iview/dist/styles/iview.css';
 
 
 
@@ -33,20 +35,10 @@ axios.interceptors.response.use((response) => {
   if (response.headers['x-auth-token']) {
     window.sessionStorage.setItem('tooken', response.headers['x-auth-token']);
   }
-  // if (response.data.code !== 0) {
-  //   console.log('code !== 0');
-  //   return Promise.reject(response);//response可以通过catch捕获信息
-  // }
   return response;
 }, (error) => {
-  if (error.message) {
-    // 登录超时
-    if (error.message === 'Network Error') {
-      // Dialog.alert({message:'登录超时'})
-      router.push('/login');
-    }
-  }
-  return Promise.reject(error);
+  Message.error(error.response.data.error)
+  return error.response;
 });
 
 
