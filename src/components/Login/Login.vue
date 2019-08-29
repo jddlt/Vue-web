@@ -5,32 +5,65 @@
         <img src="./../../assets/img/login_usr.png" alt="user">
       </div>
       <div class="item">
-        <h3 class="title">会员登入</h3>
-        <div class="input">
-          <i class="iconfont">&#xe602;</i>
-          <input type="text" placeholder="邮箱">
+        <h3 class="title">账号{{way}}</h3>
+        <div class="input" v-if="way === '注册'">
+          <i class="iconfont i">&#xe638;</i>
+          <input type="text" placeholder="昵称" v-model="name">
         </div>
         <div class="input">
-          <i class="iconfont">&#xe630;</i>
-          <input type="text" placeholder="密码">
+          <i class="iconfont i">&#xe602;</i>
+          <input type="text" placeholder="邮箱" v-model="emil">
         </div>
-        <div class="btn">
-          登陆
+        <div class="input">
+          <i class="iconfont i">&#xe630;</i>
+          <input type="text" placeholder="密码" v-model="password">
         </div>
-        <a href="#" target="_blank">忘记密码</a>
-        <a href="#" class="item-bottom">还没有账号? 立即注册 <i class="iconfont">&#xe600;</i></a>
+        <div class="btn" @click="login">
+          {{way}}
+        </div>
+        <Tooltip content="忘记了就重新注册: )" class="mt10"><a href="#" v-if="way == '登陆'">忘记密码</a></Tooltip>
+        <a href="#" class="item-bottom" @click="changeWay('注册')" v-if="way == '登陆'">还没有账号? 立即注册 <i class="iconfont">&#xe600;</i></a>
+        <a href="#" class="item-bottom" @click="changeWay('登陆')" v-else>已有账号? 去登陆 <i class="iconfont">&#xe600;</i></a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { get, post } from '@/util/api'
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      way: '登陆',
+      emil: '',
+      password: '',
+      name: ''
+    };
   },
-  methods: {},
+  methods: {
+    changeWay(way) {
+      this.way = way
+    },
+    login() {
+      if(this.way === '登陆') {
+        post('/login', {
+          emil: this.emil,
+          password: this.password
+        })
+      } else {
+        post('/addUser', {
+          name: this.name,
+          emil: this.emil,
+          password: this.password
+        }).then(msg => {
+          console.log(msg);
+        }).catch(err => {
+          throw err
+        })
+      }
+    }
+  },
   beforeDestroy() {},
 };
 </script>
@@ -44,7 +77,9 @@ input /deep/{
   outline: none;
   border: none;
   background-color: #E6E6E6;
-  height: 40px;
+  height: 100%;
+  font-size: 16px;
+  color: #666;
 }
 a{
   color: #666;
@@ -87,6 +122,17 @@ h3{
         line-height: @inputHeight;
         background-color: #E6E6E6;
         margin-bottom: 15px;
+        display: flex;
+        overflow: hidden;
+        i{
+          flex: 1;
+          text-align: center;
+          font-size: 15px;
+          margin-top: 1px;
+        }
+        input{
+          flex: 5;
+        }
       }
       .btn{
         width: @inputWidth;
@@ -98,6 +144,15 @@ h3{
         background-color: #57b846;
         font-size: 15px;
         margin-top: 30px;
+        cursor: pointer;
+        box-shadow: 0 0 2px #ccc;
+        // &:hover{
+        //   background-color: #46b868;
+        // }
+        &:active{
+          background-color: #0dec50;
+          box-shadow: 0 0 1px #0dec50;
+        }
       }
       .title{
         font-size: 25px;
