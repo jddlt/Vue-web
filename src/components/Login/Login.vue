@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { get, post } from '@/request/api'
+// import { get, post } from '@/request/api'
 export default {
   components: {},
   data() {
@@ -50,17 +50,29 @@ export default {
     },
     login() {
       if(this.way === '登陆') {
-        post('/login', {
+        this.$post('/login', {
           emil: this.emil,
           password: this.password
+        }).then(msg => {
+          if(msg.code == 200){
+            this.$Message.success({  content: '登陆成功' })
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 1500)
+          }
         })
-      } else {
-        post('/addUser', {
+      } else if (this.way === '注册'){
+        this.$post('/addUser', {
           name: this.name,
           emil: this.emil,
           password: this.password
         }).then(msg => {
-          console.log(msg);
+          if(msg.code == 200){
+            this.$Message.success({ content: '注册成功,即将跳转到登录页' })
+            setTimeout(() => {
+              this.way = '登陆'
+            }, 1500)
+          }
         })
       }
     }
@@ -121,7 +133,7 @@ h3{
         height: @inputHeight;
         border-radius: calc(@inputHeight / 2);
         line-height: @inputHeight;
-        background-color: #E6E6E6;
+        background-color: #E6E6E6 !important;
         margin-bottom: 15px;
         display: flex;
         overflow: hidden;

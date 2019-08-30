@@ -8,6 +8,7 @@ import 'iview/dist/styles/iview.css';
 
 
 const baseURL = 'http://127.0.0.1:3000'
+const unLoginUrl = ['/login', '/addUser']
 
 // 设置默认的axios的设置
 axios.defaults.baseURL = baseURL;
@@ -18,6 +19,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.data = qs.stringify(config.data);//这一步就是通过qs将传给后台的数据格式设置为form格式
+  }
+  if(unLoginUrl.includes(config.url)) {
+    delete config.data.token
   }
   return config;
 }, (error) => {
@@ -33,11 +37,14 @@ axios.interceptors.response.use((response) => {
   }
   return response;
 }, (error) => {
-  if(error.status == 401) {
-    router.push('/')
-  }
   Message.error(error.response.data.error)
-  return error.response;
+  if(error.response.status == 401) {
+    Cookie.remove('token')
+    setTimeout(() => {
+      router.push('/login')
+    },1000)
+  }
+  return error;
 });
 
 
@@ -45,7 +52,7 @@ export function get(url, params){
   return new Promise((resolve, reject) =>{        
       axios.get(url, {            
           params: {
-            params,
+            ...params,
             token: Cookie.get('token')
           }
       }).then(res => {

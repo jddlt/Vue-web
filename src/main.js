@@ -5,10 +5,18 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css';
+// import { get } from 'http';
+import { get, post } from './request/api'
+
 
 Vue.config.productionTip = false
 
 Vue.use(iView)
+
+Vue.prototype.$get = get
+Vue.prototype.$post = post
+// Vue.use(get)
+// Vue.use(post)
 
 /* eslint-disable no-new */
 new Vue({
