@@ -16,7 +16,7 @@
         </div>
         <div class="input">
           <i class="iconfont i">&#xe630;</i>
-          <input type="text" placeholder="密码" v-model="password">
+          <input type="password" placeholder="密码" v-model="password">
         </div>
         <div class="btn" @click="login">
           {{way}}
@@ -43,6 +43,9 @@ export default {
   },
   methods: {
     changeWay(way) {
+      if(way == '注册'){
+        this.password = ''
+      }
       this.way = way
     },
     login() {
