@@ -17,6 +17,27 @@
 }
 
 
+/*全站滚动条*/
+::-webkit-scrollbar {
+  width: 12px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(200, 80, 192, 0.2);
+  // opacity: 0.1;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: #4158D0;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 0px;
+  background-color: #CCCCCC;
+}
+
 /** margin  **/
 
 .ml5{
@@ -185,6 +206,38 @@
 }
 .flex-c-sc{
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+.flex-ac{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.flex-c-ac{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.flex-ec{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.flex-c-ec{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/**  float  **/
+
+.fl{
+  float: left !important;
+}
+.fr{
+  float: right !important;
 }

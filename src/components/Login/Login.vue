@@ -8,15 +8,15 @@
         <h3 class="title">账号{{way}}</h3>
         <div class="input" v-if="way === '注册'">
           <i class="iconfont i">&#xe638;</i>
-          <input type="text" placeholder="昵称" v-model="name">
+          <input type="text" placeholder="昵称" v-model.trim="name">
         </div>
         <div class="input">
           <i class="iconfont i">&#xe602;</i>
-          <input type="text" placeholder="邮箱" v-model="emil">
+          <input type="text" placeholder="邮箱" v-model.trim="emil">
         </div>
         <div class="input">
           <i class="iconfont i">&#xe630;</i>
-          <input type="password" placeholder="密码" v-model="password">
+          <input type="password" placeholder="密码" v-model.trim="password">
         </div>
         <div class="btn" @click="login">
           {{way}}
@@ -49,7 +49,23 @@ export default {
       this.way = way
     },
     login() {
+      if (!this.emil.trim()) {
+        this.$Message.error('邮箱不能为空')
+        return
+      }
+      if (!this.password.trim()) {
+        this.$Message.error('密码不能为空')
+        return
+      }
+      if(!/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test(this.emil)) {
+        this.$Message.error('邮箱格式不正确')
+        return
+      }
       if(this.way === '登陆') {
+        if(this.password.length < 6) {
+          this.$Message.error('密码需要六位及以上')
+          return
+        }
         this.$post('/login', {
           emil: this.emil,
           password: this.password
@@ -62,6 +78,18 @@ export default {
           }
         })
       } else if (this.way === '注册'){
+        if (!this.name.trim()) {
+          this.$Message.error('昵称不能为空')
+          return
+        }
+        if(this.name.length < 3) {
+          this.$Message.error('昵称不能小于两位')
+          return
+        }
+        if(this.password.length < 6) {
+          this.$Message.error('密码不能小于六位')
+          return
+        }
         this.$post('/addUser', {
           name: this.name,
           emil: this.emil,

@@ -15,6 +15,8 @@ Vue.use(iView)
 
 Vue.prototype.$get = get
 Vue.prototype.$post = post
+
+
 // Vue.use(get)
 // Vue.use(post)
 
