@@ -32,7 +32,15 @@
       </Menu>
       <div class="content fwb">
         <div class="left">
-          
+          <div></div>
+        </div>
+        <div class="mid">
+          <div class="head">
+            今日话题
+          </div>
+          <div class="list" v-for="(item, index) in wordList" :key="index">
+
+          </div>
         </div>
         <div class="right">
           
@@ -52,7 +60,14 @@ export default {
     return {
       userInfo: {},
       theme_color: 'primary',
-      message: 4
+      message: 4,
+      wordList: [
+        {
+          title: '我是第一条',
+          content: '疏星淡月，紫陌曲岸，持觞游赏，神移长川。一片彀纹，溶溶泄泄，忽而烟靡云敛。睹一丽人，缦立青水，云蒸雾霭，花衬善睐。荧荧兮若北辰之荣现，扰扰兮若紫玉之生烟。颜如舜华，迫闻素腰华琚摇;和颜静志，远望渌水呈雾绡。戏流光之夜蝶，采舞雪之琼花，流眷眷之眸光，润荣曜之笑靥.偶得美人回顾，思之朝朝暮暮。采芝兰以明愫，寄琼琚以作妆。余咏永慕叹道长，彼应影独愿偕芳。才知世有解语，不过琪语溯光',
+          createTime: '2019-09-02 20:50:08',
+        }
+      ]
     };
   },
   methods: {
@@ -157,12 +172,33 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   .left{
-    width: 30%;
+    width: 23%;
     height: 100%;
     background-color: #ccc;
   }
+  .mid{
+    width: 50%;
+    height: 100%;
+    background-color: #aaa;
+    .head{
+      width: 100%;
+      height: 80px;
+      box-shadow: 0 0 2px #ccc;
+      border-top: 5px solid #4158D0;
+      background-color: #ccc;
+      text-align: center;
+      line-height: 80px;
+      padding: 0 30px;
+      box-sizing: border-box;
+      letter-spacing: 40px;
+    }
+    .list{
+      width: 100%;
+      height: auto;
+    }
+  }
   .right{
-    width: 65%;
+    width: 23%;
     height: 100%;
     background-color: #ccc;
   }
