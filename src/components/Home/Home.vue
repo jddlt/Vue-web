@@ -317,7 +317,7 @@ export default {
       width: 100%;
       height: 70px;
       box-shadow: 0 0 2px #ccc;
-      border-top: 5px solid #4158D0;
+      border-top: 6px solid #4158D0;
       background-color: #fff;
       text-align: center;
       line-height: 70px;
