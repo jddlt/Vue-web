@@ -85,7 +85,7 @@
             </div>
             <div class="list-body">
               <p class="list-title fs16 c333 fwb">Senior Wordpress Developer</p>
-              <p class="list-content fs15 c666 fwl">疏星淡月，紫陌曲岸，持觞游赏，神移长川。一片彀纹，溶溶泄泄，忽而烟靡云敛。睹一丽人，缦立青水，云蒸雾霭，花衬善睐。荧荧兮若北辰之荣现，扰扰兮若紫玉之生烟。颜如舜华，迫闻素腰华琚摇;和颜静志，远望渌水呈雾绡。戏流光之夜蝶，采舞雪之琼花，流眷眷之眸光，润荣曜之笑靥。</p>
+              <p class="list-content fs15 c333 fwl">疏星淡月，紫陌曲岸，持觞游赏，神移长川。一片彀纹，溶溶泄泄，忽而烟靡云敛。睹一丽人，缦立青水，云蒸雾霭，花衬善睐。荧荧兮若北辰之荣现，扰扰兮若紫玉之生烟。颜如舜华，迫闻素腰华琚摇;和颜静志，远望渌水呈雾绡。戏流光之夜蝶，采舞雪之琼花，流眷眷之眸光，润荣曜之笑靥。</p>
             </div>
             <div class="list-foot flex-sc">
               <div class="foot-left flex-sc">
@@ -99,7 +99,7 @@
                 </span>
               </div>
               <div class="list-message flex-cc">
-                <i class="iconfont fs20 c999">&#xe633;</i>
+                <i class="iconfont fs21 c999">&#xe633;</i>
                 <span class="fs15 c999">2546</span>
               </div>
             </div>
@@ -392,6 +392,11 @@ export default {
           padding: 8px 0 15px 0;
           text-indent: 2em;
           line-height: 150%;
+          transition: color 0.2s;
+          cursor: pointer;
+          &:hover{
+            color: #666;
+          }
         }
       }
       .list-foot{
@@ -402,9 +407,10 @@ export default {
         }
         .list-message{
           height: 100%;
+          cursor: pointer;
           &:hover>i,&:hover>span{
             color: #4158D0 !important;
-            font-size: 16px;
+            // font-size: 16px;
           }
         }
       }
