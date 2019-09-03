@@ -445,7 +445,7 @@ export default {
           box-sizing: border-box;
         }
         .textarea{
-          text-indent: 1em;
+          // text-indent: 1em;
           width: 100%;
           height: 160px;
           border: none;
@@ -453,7 +453,7 @@ export default {
           background-color: #ccc;
           border-radius: 5px;
           margin-top: 12px;
-          padding: 4px;
+          padding: 5px;
           box-sizing: border-box;
           line-height: 120%;
         }
