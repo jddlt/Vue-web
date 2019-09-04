@@ -35,7 +35,7 @@
           <div class="info">
             <div class="info-head flex-cc">
               <div class="info-img-box flex-cc">
-                <img src="./../../assets/img/user.jpg" alt="头像" class="info-img">
+                <img src="./../../assets/img/user.jpg" alt="头像" class="info-img cp">
               </div>
             </div>
             <div class="info-body flex-c-sc">
@@ -85,7 +85,7 @@
               <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
             </div>
             <div class="list-body">
-              <p class="list-title fs16 c333 fwb">Senior Wordpress Developer</p>
+              <p class="list-title fs16 c333 fwb cp">Senior Wordpress Developer</p>
               <p class="list-content fs15 c333 fwl">疏星淡月，紫陌曲岸，持觞游赏，神移长川。一片彀纹，溶溶泄泄，忽而烟靡云敛。睹一丽人，缦立青水，云蒸雾霭，花衬善睐。荧荧兮若北辰之荣现，扰扰兮若紫玉之生烟。颜如舜华，迫闻素腰华琚摇;和颜静志，远望渌水呈雾绡。戏流光之夜蝶，采舞雪之琼花，流眷眷之眸光，润荣曜之笑靥。</p>
             </div>
             <div class="list-foot flex-sc">
@@ -110,23 +110,28 @@
           <div class="send">
             <div class="send-head cfff fs18 fwb flex-cc">发帖</div>
             <div class="send-content">
-              <input type="text" class="input fs15" placeholder="请输入您的标题">
-              <textarea class="textarea fs15" cols="30" rows="10" placeholder="请输入您的内容"></textarea>
+              <input type="text" class="input fs15" placeholder="请输入您的标题" v-model.trim="artical.title">
+              <textarea class="textarea fs15" cols="30" rows="10" placeholder="请输入您的内容" v-model.trim="artical.content"></textarea>
               <!-- <input type="textarea" class="textarea" placeholder="请输入您的内容"> -->
-              <div class="btn fs16 cfff flex-cc fwn">
+              <div class="btn fs16 cfff flex-cc fwn" @click="sendArtical">
                 发布
               </div>
             </div>
           </div>
           <div class="sort">
-            <div class="sort-head">
-              
+            <div class="sort-head flex-cc fwb fs20 cfff">今日帖子排行</div>
+            <div class="sort-body flex-c-s c333 fs15">
+              <div v-for='(item, index) in 9' :key='index' class="sort-item">
+                <span :class="(index < 3 ? 'fwb red fs16' : 'c000')">{{index + 1}}</span>
+                <span class="sort-name">日月成碧，画栏悬香</span>
+              </div>
+               <div class="sort-foot tc fs16 c000 fwb w100">加载更多 ></div>
             </div>
           </div>
         </div>
       </div>
       <div class="footer">
-        @ 版权所有
+        @ 展讯-2019 版权所有 
       </div>
     </div>
 </template>
@@ -140,13 +145,11 @@ export default {
       userInfo: {},
       theme_color: 'primary',
       message: 4,
-      wordList: [
-        {
-          title: '我是第一条',
-          content: '疏星淡月，紫陌曲岸，持觞游赏，神移长川。一片彀纹，溶溶泄泄，忽而烟靡云敛。睹一丽人，缦立青水，云蒸雾霭，花衬善睐。荧荧兮若北辰之荣现，扰扰兮若紫玉之生烟。颜如舜华，迫闻素腰华琚摇;和颜静志，远望渌水呈雾绡。戏流光之夜蝶，采舞雪之琼花，流眷眷之眸光，润荣曜之笑靥.偶得美人回顾，思之朝朝暮暮。采芝兰以明愫，寄琼琚以作妆。余咏永慕叹道长，彼应影独愿偕芳。才知世有解语，不过琪语溯光',
-          createTime: '2019-09-02 20:50:08',
-        }
-      ]
+      wordList: [],
+      artical: {
+        title: '',
+        content: ''
+      }
     };
   },
   methods: {
@@ -176,6 +179,24 @@ export default {
     loginOut() {
       Cookie.remove('token')
       this.$router.push('/login')
+    },
+    sendArtical() {
+      const { title, content } = this.artical
+      if(title.length < 5) {
+        this.$Message.info('标题不得少于5个字符')
+        return
+      }
+      if(content.length < 15) {
+        this.$Message.info('内容不得少于15个字符')
+        return
+      }
+      this.$get('/sendArtical', {
+        title,
+        content
+      }).then(res => {
+        this.$Message.success(res.msg)
+      })
+      
     }
   },
   mounted() {
@@ -404,7 +425,7 @@ export default {
           cursor: pointer;
           &:hover{
             // color: #666;
-            opacity: 0.5;
+            opacity: 0.7;
           }
         }
       }
@@ -483,9 +504,9 @@ export default {
 }
 .footer{
   width: 100%;
-  height: 50px;
+  height: 58px;
   text-align: center;
-  line-height: 50px;
+  line-height: 60px;
   font-size: 18px;
   background-color: #fff;
 }
@@ -510,10 +531,32 @@ i{
   width: 100%;
   height: auto;
   background-color: #fff;
+  margin-top: 20px;
   .sort-head{
     width: 100%;
     height: 50px;
     background-color: #4158D0;
+  }
+  .sort-body{
+    padding: 20px 40px;
+    box-sizing: border-box;
+    .sort-item{
+      width: 100%;
+      margin-bottom: 15px;
+      cursor: pointer;
+      span{
+        margin-left: 12px;
+      }
+      .sort-name{
+      &:hover{
+          text-decoration: underline;
+          // background-color: #000;
+        }
+      }
+    }
+    .sort-foot{
+      cursor: pointer;
+    }
   }
 }
 </style>

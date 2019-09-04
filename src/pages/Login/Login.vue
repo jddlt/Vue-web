@@ -82,7 +82,7 @@ export default {
           this.$Message.error('昵称不能为空')
           return
         }
-        if(this.name.length < 3) {
+        if(this.name.length < 2) {
           this.$Message.error('昵称不能小于两位')
           return
         }
