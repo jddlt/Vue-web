@@ -58,8 +58,9 @@
             </div>
             <div class="info-foot"></div>
           </div>
-          <div class="block">
-
+          <div class="block flex-cc">
+            <img src="./../../assets/img/gif_head.jpg" alt="gif_head">
+            <img src="./../../assets/img/gif.gif" alt="gif">
           </div>
         </div>
         <div class="mid">
@@ -117,8 +118,10 @@
               </div>
             </div>
           </div>
-          <div class="block">
-
+          <div class="sort">
+            <div class="sort-head">
+              
+            </div>
           </div>
         </div>
       </div>
@@ -347,6 +350,11 @@ export default {
           }
           .list-name{
             height: 30px;
+            width: 80px;
+            margin-top: 3px;
+            span{
+              width: 80px;
+            }
           }
         }
         .list-like{
@@ -361,15 +369,15 @@ export default {
         @keyframes bigger {
           25% {
             font-size: 32px;
-            color: rgba(255, 0, 0, 0.205)
+            color: rgba(255, 0, 0, 0.25)
           }
           50% {
             font-size: 24px;
-            color: rgba(255, 0, 0, 0.479)
+            color: rgba(255, 0, 0, 0.5)
           }
           75% {
             font-size: 28px;
-            color: rgba(255, 0, 0, 0.733)
+            color: rgba(255, 0, 0, 0.75)
           }
           100%{
             font-size: 24px;
@@ -392,10 +400,11 @@ export default {
           padding: 8px 0 15px 0;
           text-indent: 2em;
           line-height: 150%;
-          transition: color 0.2s;
+          transition: opacity 0.2s;
           cursor: pointer;
           &:hover{
-            color: #666;
+            // color: #666;
+            opacity: 0.5;
           }
         }
       }
@@ -488,5 +497,23 @@ i{
   height: 300px;
   margin-top: 20px;
   background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  img:first-of-type{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: -8px;
+  }
+}
+.sort{
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  .sort-head{
+    width: 100%;
+    height: 50px;
+    background-color: #4158D0;
+  }
 }
 </style>
