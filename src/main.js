@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import iView from 'iview'
+import store from './store'
 import 'iview/dist/styles/iview.css';
 // import { get } from 'http';
 import { get, post } from './request/api'
@@ -17,13 +18,12 @@ Vue.prototype.$get = get
 Vue.prototype.$post = post
 
 
-// Vue.use(get)
-// Vue.use(post)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

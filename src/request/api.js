@@ -6,7 +6,6 @@ import { Message } from 'iview'
 import 'iview/dist/styles/iview.css';
 
 
-
 const baseURL = 'http://127.0.0.1:3000'
 // const unLoginUrl = ['/login', '/addUser', '/userInfo']
 
@@ -49,7 +48,7 @@ axios.interceptors.response.use((response) => {
     return Promise.resolve(response);
   }
 }, (error) => {
-  Message.error(error.response.data.data.msg)
+  Message.error(error.response.data.msg)
   return Promise.reject(error);
 });
 
