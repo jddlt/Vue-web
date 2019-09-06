@@ -106,13 +106,13 @@
               </span>
             </div>
             <div class="list-message flex-cc" @click="openTalk(index)">
-              <i class="iconfont fs16 c999" v-if="item.open">&#xe661;</i>
+              <i class="iconfont fs16 c999 fwb" v-if="item.open">&#xe661;</i>
               <i class="iconfont fs15 c999 ml20">&#xe61a;</i>
               <span class="fs15 c999 mt-2">{{item.answer.length || 0}}</span>
               <!-- <img src="./../../assets/img/love.jpg" alt="love"> -->
             </div>
           </div>
-          <div class="talk w100" :style="{height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }">
+          <div class="talk w100" :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }">
             <div class="talk-input flex-sc">
               <div class="flex-c">
                 <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format">
@@ -124,6 +124,13 @@
               <div class="talk-btn fs15" @click="reply(item._id, index)">评论</div>
             </div>
             <div v-for='(talk, index) in item.answer' :key='index' class="flex-sc talk-list">
+                  <input type="text" placeholder="想说点什么" class="real-input ml5" :autofocus='item.open' v-model="replyContent">
+                  <div class="bbt"></div>
+                </div>
+              </div>
+              <div class="talk-btn fs15 fwb" @click='reply(item._id, index)'>评论</div>
+            </div>
+            <div v-for='(talk, index) in item.answer' :key='talk.time' class="flex-sc talk-list">
               <div class="flex-c">
                 <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format-min">
                 <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}: </span>
@@ -170,7 +177,9 @@
         </div>
       </div>
     </div>
-    <div class="footer">@ 展讯-2019 版权所有</div>
+    <Page :current="1" :total="10" simple class="page flex-cc"/>
+    <BackTop :bottom='0'></BackTop>
+    <div class="footer">@赣ICP备18011759号 展讯-2019 版权所有</div>
   </div>
 </template>
 
@@ -295,10 +304,6 @@ export default {
           this.replyContent = ''
         }
       })
-    },
-
-    timesAgo(time){
-      return timeAgo(time)
     }
   },
   mounted() {
@@ -314,8 +319,8 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
-  // background: #ccc;
+  // background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
+  background: #ccc;
   background-size: cover;
   overflow: auto;
   zoom: 1;
@@ -738,5 +743,12 @@ i {
   width: 22px;
   height: 22x;
   border-radius: 50%;
+}
+.page{
+  margin: 30px auto;
+  width: 153px;
+  border-radius: 20px;
+  height: 30px;
+  background-color: #fff;;
 }
 </style>
