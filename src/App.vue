@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style>
-@import url('./app.less');
+@import url("./app.less");
 #app {
   margin: 0;
   padding: 0;
