@@ -44,7 +44,7 @@
             <div class="info-img-box flex-cc">
               <img src="./../../assets/img/user.jpg" alt="头像" class="info-img cp" v-if="userInfo.name"/>
               <Icon type="ios-contact" class="fs95 cp" v-else/>
-            </div>
+            </div> 
           </div>
           <div class="info-body flex-c-sc">
             <div class="info-name c000 fwb fs20">{{userInfo.name || '未登录'}}</div>
