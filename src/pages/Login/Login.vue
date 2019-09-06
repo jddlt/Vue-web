@@ -1,10 +1,11 @@
 <template>
   <div class="login">
+    <upload />
     <div class="container">
       <div class="item">
         <img src="./../../assets/img/login_usr.png" alt="user">
-      </div>
-      <div class="item">
+      </div> 
+      <div class="item">  
         <h3 class="title">账号{{way}}</h3>
         <div class="input" v-if="way === '注册'">
           <i class="iconfont i">&#xe638;</i>
@@ -17,7 +18,7 @@
         <div class="input">
           <i class="iconfont i">&#xe630;</i>
           <input type="password" placeholder="密码" v-model.trim="password">
-        </div>
+        </div> 
         <div class="btn" @click="login">
           {{way}}
         </div>
@@ -29,14 +30,16 @@
   </div>
 </template>
 
-<script>
-// import { get, post } from '@/request/api'
+<script> 
+import upload from '@/components/upload/Upload'
 export default {
-  components: {},
+  components: {
+    upload
+  }, 
   data() {
     return {
       way: '登陆',
-      emil: '',
+      emil: '', 
       password: '',
       name: ''
     };

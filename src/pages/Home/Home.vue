@@ -84,7 +84,7 @@
                 <span class="fs14 c333 cp">{{item.author.name}}</span>
                 <span class="lh100">
                   <i class="iconfont fs11">&#xe629;</i>
-                  <span class="c999 fs11 lh100">很久很久以前</span>
+                  <span class="c999 fs11 lh100">{{timesAgo(item.create_time)}}</span>
                 </span>
               </div>
             </div>
@@ -106,31 +106,32 @@
               </span>
             </div>
             <div class="list-message flex-cc" @click="openTalk(index)">
-              <i class="iconfont fs15 c999">&#xe61a;</i>
-              <span class="fs15 c999 mt-2">{{item.answer_num || 0}}</span>
+              <i class="iconfont fs16 c999 fwb" v-if="item.open">&#xe661;</i>
+              <i class="iconfont fs15 c999 ml20">&#xe61a;</i>
+              <span class="fs15 c999 mt-2">{{item.answer.length || 0}}</span>
               <!-- <img src="./../../assets/img/love.jpg" alt="love"> -->
             </div>
           </div>
-          <div class="talk w100" :style="">
+          <div class="talk w100" :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }">
             <div class="talk-input flex-sc">
               <div class="flex-c">
                 <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format">
                 <div class="bbt-box">
-                  <input type="text" placeholder="想说点什么" class="real-input ml5">
+                  <input type="text" placeholder="想说点什么" class="real-input ml5" :autofocus='item.open' v-model="replyContent">
                   <div class="bbt"></div>
                 </div>
               </div>
-              <div class="talk-btn">评论</div>
+              <div class="talk-btn fs15 fwb" @click='reply(item._id, index)'>评论</div>
             </div>
-            <div v-for='talk in 0' :key='talk' class="flex-sc talk-list">
+            <div v-for='(talk, index) in item.answer' :key='talk.time' class="flex-sc talk-list">
               <div class="flex-c">
                 <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format-min">
-                <span class="ml3 f13 c333 fwl mt4">{{userInfo.name}}: </span>
-                <span class="ml10 fs13 c666 fwl mt4">如果多个客户端在传入相同参数情况</span>
+                <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}: </span>
+                <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
               </div>
               <div class="talk-time fs12 c999 mt-2">
-                2019-10-23
-                <span class="ml10"># 1楼</span>
+                {{timesAgo(talk.time)}}
+                <span class="ml10"># {{item.answer.length - index}}楼</span>
               </div>
             </div>
           </div>
@@ -169,13 +170,16 @@
         </div>
       </div>
     </div>
-    <div class="footer">@ 展讯-2019 版权所有</div>
+    <Page :current="1" :total="10" simple class="page flex-cc"/>
+    <BackTop :bottom='0'></BackTop>
+    <div class="footer">@赣ICP备18011759号 展讯-2019 版权所有</div>
   </div>
 </template>
 
 <script>
 import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
+import { timeAgo } from './../../util/formatTime'
 export default {
   components: {},
   data() {
@@ -187,7 +191,8 @@ export default {
       artical: {
         title: '',
         content: ''
-      }
+      },
+      replyContent: ''
     };
   },
   computed: {
@@ -254,12 +259,44 @@ export default {
       this.$get('/artical', {}).then(res => {
         if(res.code == 200) {
           this.articalList = res.data
+          this.articalList.forEach((val, index) => {
+            val.answer = val.answer.reverse()
+          })
         }
       })
     },
 
     openTalk(index) {
-      this.$set(this.articalList[index], 'open', !this.articalList[index].open)
+      const flag = this.articalList[index].open
+      if (flag) {
+        this.$set(this.articalList[index], 'open', false)
+      } else {
+        this.articalList.forEach(val => {
+          val.open && (val.open = false)
+        })
+        this.$set(this.articalList[index], 'open', true)
+      }
+    },
+
+    timesAgo(time) {
+      return timeAgo(time)
+    },
+
+    reply(_id, index) {
+      this.$get('/artical/reply', {
+        _id,
+        content: this.replyContent
+      }).then(res => {
+        if(res.code == 200) {
+          this.articalList[index].answer.unshift({
+            user_info: this.user,
+            content: this.replyContent,
+            time: new Date().getTime()
+          })
+          this.$Message.success(res.msg);
+          this.replyContent = ''
+        }
+      })
     }
   },
   mounted() {
@@ -275,8 +312,8 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
-  // background: #ccc;
+  // background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
+  background: #ccc;
   background-size: cover;
   overflow: auto;
   zoom: 1;
@@ -520,7 +557,9 @@ export default {
       }
       .talk{
         // border-top: 1px solid #ccc;
-        padding-bottom: 20px;
+        overflow: hidden;
+        transition: height 0.3s;
+        // padding-bottom: 12px;
         .talk-input{
           width: 100%;
           padding: 10px 0;
@@ -567,7 +606,10 @@ export default {
         }
         .talk-list{
           margin-left: 5px;
-          margin-bottom: 8px;
+          margin-bottom: 9px;
+          &:last-of-type{
+            margin-bottom: 21px;
+          }
         }
       }
     }
@@ -694,5 +736,12 @@ i {
   width: 22px;
   height: 22x;
   border-radius: 50%;
+}
+.page{
+  margin: 30px auto;
+  width: 153px;
+  border-radius: 20px;
+  height: 30px;
+  background-color: #fff;;
 }
 </style>
