@@ -86,7 +86,7 @@
                   <i class="iconfont fs11">&#xe629;</i>
                   <span class="c999 fs11 lh100">{{timesAgo(item.create_time)}}</span>
                 </span>
-              </div>
+              </div> 
             </div>
             <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
           </div>
