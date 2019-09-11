@@ -42,8 +42,13 @@
         <div class="info">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
-              <img src="./../../assets/img/user.jpg" alt="头像" class="info-img cp" v-if="userInfo.name"/>
-              <Icon type="ios-contact" class="fs95 cp" v-else/>
+              <img
+                src="./../../assets/img/user.jpg"
+                alt="头像"
+                class="info-img cp"
+                v-if="userInfo.name"
+              />
+              <Icon type="ios-contact" class="fs95 cp" v-else />
             </div>
           </div>
           <div class="info-body flex-c-sc">
@@ -73,9 +78,6 @@
       </div>
       <div class="mid">
         <div class="head">今日话题</div>
-        <!-- <div class="list" v-for="(item, index) in wordList" :key="index">
-
-        </div>-->
         <div class="list" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
@@ -112,38 +114,43 @@
               <!-- <img src="./../../assets/img/love.jpg" alt="love"> -->
             </div>
           </div>
-          <div class="talk w100" :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }">
+          <div
+            class="talk w100"
+            :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }"
+          >
             <div class="talk-input flex-sc">
               <div class="flex-c">
-                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format">
+                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format" />
                 <div class="bbt-box">
-                  <input type="text" placeholder="想说点什么" class="real-input ml5" v-model.trim="replyContent">
+                  <input
+                    type="text"
+                    placeholder="想说点什么"
+                    class="real-input ml5"
+                    v-model.trim="replyContent"
+                  />
                   <div class="bbt"></div>
                 </div>
               </div>
               <div class="talk-btn fs15" @click="reply(item._id, index)">评论</div>
             </div>
-            <div v-for='(talk, index) in item.answer' :key='index' class="flex-sc talk-list">
-                  <input type="text" placeholder="想说点什么" class="real-input ml5" :autofocus='item.open' v-model="replyContent">
-                  <div class="bbt"></div>
-                </div>
-              </div>
-              <div class="talk-btn fs15 fwb" @click='reply(item._id, index)'>评论</div>
-            </div>
-            <div v-for='(talk, index) in item.answer' :key='talk.time' class="flex-sc talk-list">
+            <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
               <div class="flex-c">
-                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format-min">
-                <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}: </span>
+                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format-min" />
+                <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}:</span>
                 <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
               </div>
               <div class="talk-time fs12 c999 mt-2">
                 {{timesAgo(talk.time)}}
-                <span class="ml10"># {{item.answer && (item.answer .length - index) }}楼</span>
+                <span
+                  class="ml10"
+                ># {{item.answer && (item.answer .length - index) }}楼</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- </div>
+      </div>-->
       <div class="right">
         <div class="send">
           <div class="send-head cfff fs18 fwb flex-cc">发帖</div>
@@ -177,8 +184,8 @@
         </div>
       </div>
     </div>
-    <Page :current="1" :total="10" simple class="page flex-cc"/>
-    <BackTop :bottom='0'></BackTop>
+    <Page :current="1" :total="10" simple class="page flex-cc" />
+    <BackTop :bottom="0"></BackTop>
     <div class="footer">@赣ICP备18011759号 展讯-2019 版权所有</div>
   </div>
 </template>
@@ -186,7 +193,7 @@
 <script>
 import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
-import { timeAgo } from './../../util/formatTime'
+import { timeAgo } from "./../../util/formatTime";
 export default {
   components: {},
   data() {
@@ -196,10 +203,10 @@ export default {
       message: 4,
       articalList: [],
       artical: {
-        title: '',
-        content: ''
+        title: "",
+        content: ""
       },
-      replyContent: ''
+      replyContent: ""
     };
   },
   computed: {
@@ -256,59 +263,63 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("发帖成功");
-          this.artical = {title: '', content: ''}
-          this.getArticalList()
+          this.artical = { title: "", content: "" };
+          this.getArticalList();
         }
-      })
+      });
     },
 
     getArticalList() {
-      this.$get('/artical', {}).then(res => {
-        if(res.code == 200) {
-          this.articalList = res.data
+      this.$get("/artical", {}).then(res => {
+        if (res.code == 200) {
+          this.articalList = res.data;
           this.articalList.forEach((val, index) => {
-            val.answer = val.answer.reverse()
-          })
+            val.answer = val.answer.reverse();
+          });
         }
-      })
+      });
     },
 
     openTalk(index) {
-      const flag = this.articalList[index].open
+      const flag = this.articalList[index].open;
       if (flag) {
-        this.articalList[index].open = false
+        this.articalList[index].open = false;
       } else {
         this.articalList.forEach((val, index) => {
-          val.open && (val.open = false)
-        })
-        this.$set(this.articalList[index], 'open', true)
+          val.open && (val.open = false);
+        });
+        this.$set(this.articalList[index], "open", true);
       }
     },
 
     reply(_id, index) {
-      if(!this.replyContent){
-        this.$Message.info('不能说空话哦');
-        return
+      if (!this.replyContent) {
+        this.$Message.info("不能说空话哦");
+        return;
       }
-      this.$get('/artical/reply', {
+      this.$get("/artical/reply", {
         _id,
         content: this.replyContent
       }).then(res => {
-        if(res.code == 200) {
+        if (res.code == 200) {
           this.articalList[index].answer.unshift({
             user_info: this.user,
             content: this.replyContent,
             time: new Date().getTime()
-          })
+          });
           this.$Message.success(res.msg);
-          this.replyContent = ''
+          this.replyContent = "";
         }
-      })
+      });
+    },
+
+    timesAgo(time) {
+      return timeAgo(time);
     }
   },
   mounted() {
-    this.getUserInfo()
-    this.getArticalList()
+    this.getUserInfo();
+    this.getArticalList();
   },
   beforeDestroy() {}
 };
@@ -527,8 +538,8 @@ export default {
         height: auto;
         border-bottom: 1px solid #ccc;
         &:hover {
-            // color: #666;
-            opacity: 0.65;
+          // color: #666;
+          opacity: 0.65;
         }
         .list-title {
           width: 100%;
@@ -552,7 +563,7 @@ export default {
           width: 120px;
         }
         .list-message {
-          height: 100%; 
+          height: 100%;
           cursor: pointer;
           &:hover > i,
           &:hover > span {
@@ -562,19 +573,19 @@ export default {
           }
         }
       }
-      .talk{
+      .talk {
         // border-top: 1px solid #ccc;
         transition: height 0.3s;
         // padding-bottom: 20px;
-        overflow: hidden; 
-        .talk-input{
+        overflow: hidden;
+        .talk-input {
           width: 100%;
           padding: 10px 0;
-          .bbt-box{
+          .bbt-box {
             position: relative;
             width: 480px;
             height: 38px;
-            .bbt{
+            .bbt {
               position: absolute;
               width: 0;
               height: 1px;
@@ -583,19 +594,19 @@ export default {
               bottom: 0;
               transition: width 0.3s;
             }
-            .real-input{
+            .real-input {
               width: 480px;
               outline: none;
               height: 38px;
               border: none;
               transition: border-bottom 1s;
               font-size: 15px;
-              &:focus + .bbt{
+              &:focus + .bbt {
                 width: 480px;
               }
             }
           }
-          .talk-btn{
+          .talk-btn {
             width: 30px;
             height: 100%;
             text-align: right;
@@ -604,17 +615,17 @@ export default {
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            &:hover{
+            &:hover {
               // background-color: #eee;
               // text-align: center;
               text-decoration: underline;
             }
           }
         }
-        .talk-list{
+        .talk-list {
           margin-left: 5px;
           margin-bottom: 9px;
-          &:last-of-type{
+          &:last-of-type {
             padding-bottom: 12px;
           }
         }
@@ -734,21 +745,21 @@ i {
     }
   }
 }
-.img-format{
+.img-format {
   width: 25px;
   height: 25px;
   border-radius: 50%;
 }
-.img-format-min{
+.img-format-min {
   width: 22px;
   height: 22x;
   border-radius: 50%;
 }
-.page{
+.page {
   margin: 30px auto;
   width: 153px;
   border-radius: 20px;
   height: 30px;
-  background-color: #fff;;
+  background-color: #fff;
 }
 </style>

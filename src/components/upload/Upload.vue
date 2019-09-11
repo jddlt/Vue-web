@@ -1,143 +1,132 @@
 <template>
-  <div class="upload">
-    <div class="demo-upload-list"></div>
-    <Upload
-      ref="upload"
-      :show-upload-list="false"
-      :on-success="handleSuccess"
-      :format="['jpg','jpeg','png']"
-      :max-size="2048"
-      :on-format-error="handleFormatError"
-      :on-exceeded-size="handleMaxSize"
-      :before-upload="handleBeforeUpload"
-      type="select"
-      action="http://127.0.0.1:3000/upload"
-      style="display: inline-block;width:58px;"
-    >
-      <div class="camara">
-        <Icon type="ios-camera" size="20"></Icon>
-      </div>
-    </Upload>
-    <Modal title="View Image" v-model="visible">
-      <img
-        :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'"
-        v-if="visible"
-        style="width: 100%"
-      />
-    </Modal>
+  <div>
+    <div class="box flex-cc" :style="style">
+      <img src="" alt="" ref="img" accept="image/*" class="img">
+      <Icon type="ios-contact" class="cp no-avatar" v-if="!imgurl"/>
+      <div class="tips flex-cc fs15 cfff fwl">{{imgurl ? '修改头像' : '上传头像'}}</div>
+      <input type="file" @change='fileChange($event)' class="input cp">
+    </div>
   </div>
 </template>
 
 <script>
+import qiniu from 'qiniu'
+import { ak, sk, bucket } from './../../../qiniu.config'
 export default {
   data() {
     return {
-      defaultList: [],
-      imgName: "",
-      visible: false,
-      uploadList: []
-    };
-  },
-  methods: {
-    handleView(name) {
-      this.imgName = name;
-      this.visible = true;
-    },
-    handleRemove(file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess(res, file, list) {
-      console.log("res", res);
-      console.log("file", file);
-      console.log("list", list);
-    },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: "The file format is incorrect",
-        desc:
-          "File format of " +
-          file.name +
-          " is incorrect, please select jpg or png."
-      });
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "Exceeding file size limit",
-        desc: "File  " + file.name + " is too large, no more than 2M."
-      });
-    },
-    handleBeforeUpload() {
-      const check = this.uploadList.length < 5;
-      if (!check) {
-        this.$Notice.warning({
-          title: "Up to five pictures can be uploaded."
-        });
-      }
-      return check;
+      imgurl: '',
+      style: {
+        'border-radius': '50%'
+      },
+      token: ''
     }
   },
   mounted() {
-    this.uploadList = this.$refs.upload.fileList;
+    const mac = new qiniu.auth.digest.Mac(ak, sk);
+    const options = {
+      scope: bucket,
+    };
+    const putPolicy = new qiniu.rs.PutPolicy(options);
+    this.token = putPolicy.uploadToken(mac);
+  },
+  methods: {
+    fileChange(e) {
+      const _this = this
+      const file = e.target.files[0]
+      if(!/\.(png|jpe?g|gif)$/g.test(file.name)) {
+        this.$Message.error('请上传图片')
+      } else if(file.size > 2000000) {
+        this.$Message.error('图片大于2M')
+      } else {
+        const Reader = new FileReader()
+        Reader.readAsDataURL(file);
+        Reader.addEventListener('load', function() {
+          console.log(this.result);
+          _this.putb64(this.result).then(res => {
+            _this.$post('/upload', {
+              hash: res
+            }).then(res => {
+              console.log('res', res);
+            })
+          })
+          _this.$refs.img.src = this.result
+          _this.imgurl = true
+        })
+      }
+    },
+    putb64(result){
+      return new Promise((resolve, reject) => {
+        const pic = result.replace(/data:image\/.*;base64,/,'')
+        const url = "http://upload.qiniup.com/putb64/-1"; //非华东空间需要根据注意事项 1 修改上传域名
+        const xhr = new XMLHttpRequest();
+        const _this = this
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState==4){
+            console.log('xhr.responseText.hash', JSON.parse(xhr.responseText)['hash']);
+            resolve(JSON.parse(xhr.responseText)['hash'])
+          }
+        }
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+        xhr.setRequestHeader("Authorization", 'UpToken ' + _this.token);
+        xhr.send(pic);
+      })
+    }
   }
-};
+}
 </script>
 
-
 <style scoped lang='less'>
-.upload {
-  width: 100vw;
-  height: 100vh;
-  background-color: #ccc;
-}
-.demo-upload-list {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-right: 4px;
-}
-.camara{
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-right: 4px;
-}
-.demo-upload-list img {
-  width: 100%;
-  height: 100%;
-}
-.demo-upload-list-cover {
-  display: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.demo-upload-list:hover .demo-upload-list-cover {
-  display: block;
-}
-.demo-upload-list-cover i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0 2px;
-}
-</style>
+  .box{
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    overflow: hidden;
+    &:hover .tips{
+      z-index: 1;
+      cursor: pointer;
+    }
+    .no-avatar{
+      position: absolute;
+      // width: 100px;
+      // height: 100px;
+      // font-size: 100%;
+      .fs95
+    }
+    .input{
+      width: 100px;
+      height: 100px;
+      border: none;
+      outline: none;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+    }
+    .img{
+      width: 100px;
+      height: 100px;
+    }
+    .tips{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(0,0,0,0.5);
+      z-index: -1
+    }
+  }
+  .fs95{
+    font-size: 95px;
+  }
+  input{
+    cursor: pointer !important;
+  }
+</style>>
