@@ -6,7 +6,11 @@ import { Message } from 'iview'
 import 'iview/dist/styles/iview.css';
 
 
-const baseURL = 'http://127.0.0.1:3000'
+const baseURL = 'https://www.mrpzx.cn/'
+// const baseURL = 'http://127.0.0.1:3000/'
+
+
+
 // const unLoginUrl = ['/login', '/addUser', '/userInfo']
 
 // 设置默认的axios的设置
