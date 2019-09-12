@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <upload />
+    <!-- <upload /> -->
     <div class="container">
       <div class="item">
         <img src="./../../assets/img/login_usr.png" alt="user">
@@ -31,11 +31,9 @@
 </template>
 
 <script> 
-import upload from '@/components/upload/Upload'
+// import upload from '@/components/upload/Upload'
 export default {
-  components: {
-    upload
-  }, 
+  components: { }, 
   data() {
     return {
       way: '登陆',

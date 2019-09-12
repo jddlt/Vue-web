@@ -17,7 +17,7 @@
 
       <Submenu name="2" class="fr mr10" v-if="userInfo.name">
         <template slot="title">
-          <img src="./../../assets/img/user.jpg" alt="头像" class="user-img" />
+          <img :src="$crop(userInfo.avatar, 27, 27)" alt="" class="user-img" />
           <!-- <Icon type="ios-contact" class="fs25" /> -->
           {{userInfo.name}}
         </template>
@@ -42,13 +42,14 @@
         <div class="info">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
-              <img
-                src="./../../assets/img/user.jpg"
-                alt="头像"
+              <upload :avatar="userInfo.avatar"/>
+              <!-- <img
+                :src="$crop(userInfo.avatar, 100, 100)"
+                alt=""
                 class="info-img cp"
                 v-if="userInfo.name"
-              />
-              <Icon type="ios-contact" class="fs95 cp" v-else />
+              /> -->
+              <!-- <Icon type="ios-contact" class="fs95 cp" v-else /> -->
             </div>
           </div>
           <div class="info-body flex-c-sc">
@@ -81,7 +82,7 @@
         <div class="list" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
-              <img src="./../../assets/img/user.jpg" alt="头像" class="list-img cp" />
+              <img :src="$crop(item.author.avatar, 35, 35)" alt="" class="list-img cp" />
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp">{{item.author.name}}</span>
                 <span class="lh100">
@@ -120,7 +121,7 @@
           >
             <div class="talk-input flex-sc">
               <div class="flex-c">
-                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format" />
+                <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" />
                 <div class="bbt-box">
                   <input
                     type="text"
@@ -135,7 +136,7 @@
             </div>
             <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
               <div class="flex-c">
-                <img src="./../../assets/img/user.jpg" alt="头像" class="talk-img mr5 img-format-min" />
+                <img :src="$crop(talk.user_info.avatar, 22, 22)" alt="" class="talk-img mr5 img-format-min" />
                 <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}:</span>
                 <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
               </div>
@@ -194,8 +195,11 @@
 import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
 import { timeAgo } from "./../../util/formatTime";
+import upload from '@/components/upload/Upload'
 export default {
-  components: {},
+  components: {
+    upload
+  },
   data() {
     return {
       userInfo: {},

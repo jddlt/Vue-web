@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/pages/Login/Login'
 import Home from '@/pages/Home/Home'
-import Upload from '@/components/upload/Upload'
+// import Upload from '@/components/upload/Upload'
  
 Vue.use(Router)
 
@@ -23,11 +23,6 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/upload',
-      name: 'Upload',
-      component: Upload
-    },
+    }
   ]
 })
