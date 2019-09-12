@@ -39,7 +39,7 @@
     </Menu>
     <div class="content fwb">
       <div class="left">
-        <div class="info">
+        <div class="info bs">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
               <upload :avatar="userInfo.avatar"/>
@@ -72,14 +72,14 @@
           </div>
           <div class="info-foot"></div>
         </div>
-        <div class="block flex-cc">
+        <div class="block flex-cc bs">
           <img src="./../../assets/img/gif_head.jpg" alt="gif_head" />
           <img src="./../../assets/img/gif.gif" alt="gif" />
         </div>
       </div>
       <div class="mid">
-        <div class="head">今日话题</div>
-        <div class="list" v-for="(item, index) in articalList" :key="item._id">
+        <div class="head bs">今日话题</div>
+        <div class="list bs" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
               <img :src="$crop(item.author.avatar, 35, 35)" alt="" class="list-img cp" />
@@ -121,7 +121,9 @@
           >
             <div class="talk-input flex-sc">
               <div class="flex-c">
-                <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" />
+                <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-if="userInfo.avatar"/>
+                <Icon type="ios-contact" class="cp talk-img mr5 fs25" v-else/>
+                <!-- <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-else/> -->
                 <div class="bbt-box">
                   <input
                     type="text"
@@ -153,7 +155,7 @@
       <!-- </div>
       </div>-->
       <div class="right">
-        <div class="send">
+        <div class="send bs">
           <div class="send-head cfff fs18 fwb flex-cc">发帖</div>
           <div class="send-content">
             <input
@@ -173,7 +175,7 @@
             <div class="btn fs16 cfff flex-cc fwn" @click="sendArtical">发布</div>
           </div>
         </div>
-        <div class="sort">
+        <div class="sort bs">
           <div class="sort-head flex-cc fwb fs20 cfff">今日帖子排行</div>
           <div class="sort-body flex-c-s c333 fs15">
             <div v-for="(item, index) in 9" :key="index" class="sort-item">
@@ -187,7 +189,7 @@
     </div>
     <Page :current="1" :total="10" simple class="page flex-cc" />
     <BackTop :bottom="0"></BackTop>
-    <div class="footer">@赣ICP备18011759号 展讯-2019 版权所有</div>
+    <div class="footer c000">©2019 展讯版权所有 <a href="http://sh.beian.miit.gov.cn" target="_blank" class="c666">  赣ICP备18011759号-2 </a> </div>
   </div>
 </template>
 
@@ -335,7 +337,7 @@ export default {
   width: 100%;
   height: 100%;
   // background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
-  background: #ccc;
+  background: #e7e7e7;
   background-size: cover;
   overflow: auto;
   zoom: 1;
