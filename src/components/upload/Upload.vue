@@ -77,7 +77,10 @@ export default {
               key: res
             }).then(res => {
               _this.imgurl = host + _this.user._id
-              _this.$Message.success('更改成功,请刷新完成同步')
+              _this.$Message.success('更新成功,即将为您刷新页面')
+              setTimeout(() => {
+                window.location.reload();
+              }, 1600)
             })
           })
           // _this.$refs.img.src = this.result
@@ -89,7 +92,7 @@ export default {
       return new Promise((resolve, reject) => {
         const pic = result.replace(/data:image\/.*;base64,/,'')
         const key = encode(this.user._id)
-        const url = `http://upload.qiniup.com/putb64/-1/key/${key}/`; //非华东空间需要根据注意事项 1 修改上传域名
+        const url = `https://upload.qiniup.com/putb64/-1/key/${key}/`; //非华东空间需要根据注意事项 1 修改上传域名
         const xhr = new XMLHttpRequest();
         const _this = this
         xhr.onreadystatechange = function(){
