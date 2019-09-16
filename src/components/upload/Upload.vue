@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box flex-cc" :style="style">
-      <img :src="$crop(imgurl, 92, 92)" alt="" ref="img" accept="image/*" class="img" v-if="avatar && imgurl">
+      <img :src="$crop(imgurl, 92, 92, time)" alt="" ref="img" accept="image/*" class="img" v-if="avatar && imgurl">
       <Icon type="ios-contact" class="cp no-avatar" v-else/>
       <div class="tips flex-cc fs15 cfff fwl">{{imgurl ? '更换头像' : '上传头像'}}</div>
       <input type="file" @change='fileChange($event)' class="input cp" title="">
@@ -23,7 +23,8 @@ export default {
         "width": this.imgurl ? '92px' : '100px',
         "height": this.imgurl ? '92px' : '100px',
       },
-      token: ''
+      token: '',
+      time: new Date().getTime()
     }
   },
   props: {

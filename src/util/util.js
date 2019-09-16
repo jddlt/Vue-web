@@ -8,8 +8,8 @@ export function encode(str) {
 }
 
 // crop img
-export function crop(url, width, height) {
-    return url + `?imageView2/1/w/${width}/h/${height}/interlace/1/q/100|imageslim&_t=${new Date().getTime()}`;
+export function crop(url, width, height, time = 0) {
+    return url + `?imageView2/1/w/${width}/h/${height}/interlace/1/q/100|imageslim&_t=${time}`;
 }
 
 

@@ -17,7 +17,7 @@
 
       <Submenu name="2" class="fr mr10" v-if="userInfo.name">
         <template slot="title">
-          <img :src="$crop(userInfo.avatar, 27, 27)" alt="" class="user-img" />
+          <img :src="$crop(userInfo.avatar, 27, 27, time, time)" alt="" class="user-img" />
           <!-- <Icon type="ios-contact" class="fs25" /> -->
           {{userInfo.name}}
         </template>
@@ -37,6 +37,7 @@
         </span>
       </MenuItem>
     </Menu>
+    <!-- <marquee align="absmiddle" behavior="scroll" bgcolor="#ccc" direction="left" height="50px" width="100%" style="margin-top: 100px">不得已, 回复删除啦 (ノへ￣、) </marquee> -->
     <div class="content fwb">
       <div class="left">
         <div class="info bs">
@@ -82,7 +83,7 @@
         <div class="list bs" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
-              <img :src="$crop(item.author.avatar, 35, 35)" alt="" class="list-img cp" />
+              <img :src="$crop(item.author.avatar, 35, 35, time)" alt="" class="list-img cp"/>
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp">{{item.author.name}}</span>
                 <span class="lh100">
@@ -121,7 +122,7 @@
           >
             <div class="talk-input flex-sc">
               <div class="flex-c">
-                <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-if="userInfo.avatar"/>
+                <img :src="$crop(userInfo.avatar, 25, 25, time)" alt="" class="talk-img mr5 img-format" v-if="userInfo.avatar"/>
                 <Icon type="ios-contact" class="cp talk-img mr5 fs25" v-else/>
                 <!-- <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-else/> -->
                 <div class="bbt-box">
@@ -138,8 +139,8 @@
             </div>
             <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
               <div class="flex-c">
-                <img :src="$crop(talk.user_info.avatar, 22, 22)" alt="" class="talk-img mr5 img-format-min" />
-                <span class="ml3 f13 c333 fwl mt4">{{talk.user_info.name}}:</span>
+                <img :src="$crop(talk.user_info.avatar, 22, 22, time)" alt="" class="talk-img mr5 img-format-min" />
+                <span class="ml3 fs13 blue fwl mt4">{{talk.user_info.name}}:</span>
                 <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
               </div>
               <div class="talk-time fs12 c999 mt-2">
@@ -189,7 +190,7 @@
     </div>
     <Page :current="1" :total="10" simple class="page flex-cc" />
     <BackTop :bottom="0"></BackTop>
-    <div class="footer c000">©2019 展讯版权所有 <a href="http://sh.beian.miit.gov.cn" target="_blank" class="c666">  赣ICP备18011759号-2 </a> </div>
+    <div class="footer c000 fs15">©2019 展讯版权所有 <a href="http://sh.beian.miit.gov.cn" target="_blank" class="c666 fs15">  赣ICP备18011759号-2 </a> </div>
   </div>
 </template>
 
@@ -212,7 +213,8 @@ export default {
         title: "",
         content: ""
       },
-      replyContent: ""
+      replyContent: "",
+      time: new Date().getTime()
     };
   },
   computed: {
@@ -326,6 +328,13 @@ export default {
   mounted() {
     this.getUserInfo();
     this.getArticalList();
+    this.$Notice.config({
+        top: 60,
+        duration: 5
+    });
+    this.$Notice.info({
+      title: '不得已, 回复被删除啦 (ノへ￣、)'
+    })
   },
   beforeDestroy() {}
 };
@@ -336,9 +345,9 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  // background: #ccc url("./../../assets/img/bgc.jpg") no-repeat bottom fixed;
-  background: #e7e7e7;
-  background-size: cover;
+  background:url("./../../assets/img/bgc.jpg") repeat left top;
+  // background: #e7e7e7;
+  // background-size: cover;
   overflow: auto;
   zoom: 1;
 }
@@ -497,7 +506,8 @@ export default {
           width: 120px;
           height: 100%;
           .list-img {
-            width: 35px;
+            width: 35px !important;
+            min-width: 35px !important;
             height: 35px;
             border-radius: 50%;
             margin-right: 8px;
@@ -768,4 +778,9 @@ i {
   height: 30px;
   background-color: #fff;
 }
+// .marquee{
+//   width: 100%;
+//   height: 50px;
+//   line-height: 50px;
+// }
 </style>
