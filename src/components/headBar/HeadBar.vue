@@ -8,13 +8,13 @@
     @on-select="select"
     class="head-bar"
   >
-    <MenuItem name="1" class="ml10">
+    <MenuItem name="1" class="mml10">
       <h1 class="h1">
         <img src="./../../assets/img/logo.png" alt="展讯" />
       </h1>
     </MenuItem>
 
-    <Submenu name="2" class="fr mr10" v-if="userInfo.name">
+    <Submenu name="2" class="fr mmr10" v-if="userInfo.name">
       <template slot="title">
         <img :src="$crop(userInfo.avatar, 27, 27, time)" alt class="user-img" />
         <!-- <Icon type="ios-contact" class="fs25" /> -->
@@ -24,7 +24,7 @@
       <MenuItem name="2-2">退出登录</MenuItem>
     </Submenu>
 
-    <MenuItem name="3" class="fr mr10" v-else>
+    <MenuItem name="3" class="fr mmr10" v-else>
       <Icon type="ios-contact" class="fs25" />登录
     </MenuItem>
 
@@ -95,6 +95,7 @@ export default {
 
 
 <style scoped lang='less'>
+
 .h1 {
   height: 46px;
   margin-top: 7px;
@@ -125,5 +126,25 @@ export default {
   height: 27px;
   border-radius: 50%;
   margin-right: 2px;
+}
+.mml10{
+  margin-left: 10px;
+}
+.mmr10{
+  margin-right: 10px;
+}
+@media screen and (max-width: 375px){
+  .ivu-menu-horizontal .ivu-menu-item, .ivu-menu-horizontal .ivu-menu-submenu{
+    padding: 0 12px;
+  }
+  .mmr10 {
+    margin-right: 0;
+  }
+  .mml10{
+    margin-left: 0; 
+  }
+  .ivu-menu-primary{
+    width: 100%;
+  }
 }
 </style>

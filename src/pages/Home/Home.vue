@@ -7,8 +7,7 @@
         <div class="info bs">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
-              <upload :avatar="userInfo.avatar"/>
-    
+              <upload :avatar="userInfo.avatar" />
             </div>
           </div>
           <div class="info-body flex-c-sc">
@@ -41,7 +40,7 @@
         <div class="list bs" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
-              <img :src="$crop(item.author.avatar, 35, 35, time)" alt="" class="list-img cp"/>
+              <img :src="$crop(item.author.avatar, 35, 35, time)" alt class="list-img cp" />
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp">{{item.author.name}}</span>
                 <span class="lh100">
@@ -79,9 +78,14 @@
             :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }"
           >
             <div class="talk-input flex-sc">
-              <div class="flex-c">
-                <img :src="$crop(userInfo.avatar, 25, 25, time)" alt="" class="talk-img mr5 img-format" v-if="userInfo.avatar"/>
-                <Icon type="ios-contact" class="cp talk-img mr5 fs25" v-else/>
+              <div class="flex-c w80">
+                <img
+                  :src="$crop(userInfo.avatar, 25, 25, time)"
+                  alt
+                  class="talk-img mr5 img-format"
+                  v-if="userInfo.avatar"
+                />
+                <Icon type="ios-contact" class="cp talk-img mr5 fs25" v-else />
                 <!-- <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-else/> -->
                 <div class="bbt-box">
                   <input
@@ -97,7 +101,11 @@
             </div>
             <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
               <div class="flex-c">
-                <img :src="$crop(talk.user_info.avatar, 22, 22, time)" alt="" class="talk-img mr5 img-format-min" />
+                <img
+                  :src="$crop(talk.user_info.avatar, 22, 22, time)"
+                  alt
+                  class="talk-img mr5 img-format-min"
+                />
                 <span class="ml3 fs13 blue fwl mt4">{{talk.user_info.name}}:</span>
                 <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
               </div>
@@ -156,9 +164,9 @@
 import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
 import { timeAgo } from "./../../util/formatTime";
-import upload from '@/components/upload/Upload'
-import HeadBar from '@/components/headBar/HeadBar'
-import Footer from '@/components/footer/Footer'
+import upload from "@/components/upload/Upload";
+import HeadBar from "@/components/headBar/HeadBar";
+import Footer from "@/components/footer/Footer";
 export default {
   components: {
     upload,
@@ -181,7 +189,6 @@ export default {
   },
 
   methods: {
-
     sendArtical() {
       const { title, content } = this.artical;
       if (title.length < 5) {
@@ -254,18 +261,18 @@ export default {
     },
 
     articalDetail() {
-      this.$router.push('/artical')
+      this.$router.push("/artical");
     }
   },
   mounted() {
     this.getArticalList();
     this.$Notice.config({
-        top: 60,
-        duration: 2
+      top: 60,
+      duration: 2
     });
     this.$Notice.info({
-      title: '不得已, 回复被删除啦 (ノへ￣、)'
-    })
+      title: "不得已, 回复被删除啦 (ノへ￣、)"
+    });
   },
   beforeDestroy() {}
 };
@@ -273,16 +280,6 @@ export default {
 
 
 <style scoped lang='less'>
-@media screen and (max-width: 1236px){
-  .left{
-    display: none !important;
-  }
-}
-@media screen and (max-width: 920px){
-  .right{
-    display: none !important;
-  }
-}
 .home {
   width: 100%;
   height: 100%;
@@ -299,7 +296,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  .bgc; 
+  .bgc;
 }
 // .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item:hover,
 // .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu:hover {
@@ -394,7 +391,7 @@ export default {
   .mid {
     width: 90%;
     max-width: 600px;
-    min-width: 375px;
+    min-width: 325px;
     height: 100%;
     // background-color: #ccc;
     .head {
@@ -520,6 +517,7 @@ export default {
           .bbt-box {
             position: relative;
             width: 480px;
+            // width: 80%;
             height: 38px;
             .bbt {
               position: absolute;
@@ -700,10 +698,37 @@ i {
 //   height: 50px;
 //   line-height: 50px;
 // }
-.c{
-  color: #2d8cf0
+.c {
+  color: #2d8cf0;
 }
-.bgc{
+.bgc {
   background-color: #2d8cf0;
+}
+@media screen and (max-width: 1236px) {
+  .left {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 920px) {
+  .right {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .head{
+    letter-spacing: 27px !important;
+  }
+  .w80{
+    width: 85%;
+  }
+  .real-input{
+    width: 100% !important;
+  }
+  .bbt-box{
+    width: 85%;
+  }
+  .bbt-box{
+    padding: 0 18px !important;
+  }
 }
 </style>
