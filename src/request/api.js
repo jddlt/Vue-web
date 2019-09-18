@@ -6,10 +6,9 @@ import { Message } from 'iview'
 import 'iview/dist/styles/iview.css';
 
 
-const baseURL = 'https://www.mrpzx.cn/'
-// const baseURL = 'http://127.0.0.1:3000/'
-
-
+const baseURL = (process.env.NODE_ENV === 'development'
+                  ? 'http://127.0.0.1:3000/'
+                  : 'https://www.mrpzx.cn/')
 
 // const unLoginUrl = ['/login', '/addUser', '/userInfo']
 

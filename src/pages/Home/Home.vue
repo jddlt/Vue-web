@@ -1,56 +1,14 @@
 <template>
   <div class="home">
-    <Menu
-      enu
-      mode="horizontal"
-      :theme="theme_color"
-      active-name="1"
-      :accordion="true"
-      @on-select="select"
-      class="head-bar"
-    >
-      <MenuItem name="1" class="ml10">
-        <h1 class="h1">
-          <img src="./../../assets/img/logo.png" alt="展讯" />
-        </h1>
-      </MenuItem>
-
-      <Submenu name="2" class="fr mr10" v-if="userInfo.name">
-        <template slot="title">
-          <img :src="$crop(userInfo.avatar, 27, 27, time, time)" alt="" class="user-img" />
-          <!-- <Icon type="ios-contact" class="fs25" /> -->
-          {{userInfo.name}}
-        </template>
-        <MenuItem name="2-1">个人中心</MenuItem>
-        <MenuItem name="2-2">退出登录</MenuItem>
-      </Submenu>
-
-      <MenuItem name="3" class="fr mr10" v-else>
-        <Icon type="ios-contact" class="fs25" />登录
-      </MenuItem>
-
-      <MenuItem name="4" class="fr" v-if="userInfo.name">
-        <!-- <Icon type="ios-contact" class="fs25"/> -->
-        <span class="info">
-          消息
-          <span class="dot" v-if="message">{{message}}</span>
-        </span>
-      </MenuItem>
-    </Menu>
     <!-- <marquee align="absmiddle" behavior="scroll" bgcolor="#ccc" direction="left" height="50px" width="100%" style="margin-top: 100px">不得已, 回复删除啦 (ノへ￣、) </marquee> -->
+    <HeadBar></HeadBar>
     <div class="content fwb">
       <div class="left">
         <div class="info bs">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
               <upload :avatar="userInfo.avatar"/>
-              <!-- <img
-                :src="$crop(userInfo.avatar, 100, 100)"
-                alt=""
-                class="info-img cp"
-                v-if="userInfo.name"
-              /> -->
-              <!-- <Icon type="ios-contact" class="fs95 cp" v-else /> -->
+    
             </div>
           </div>
           <div class="info-body flex-c-sc">
@@ -94,7 +52,7 @@
             </div>
             <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
           </div>
-          <div class="list-body">
+          <div class="list-body" @click="articalDetail">
             <p class="list-title fs16 c333 fwb cp">{{item.title}}</p>
             <p class="list-content fs15 c333 fwl">{{item.content}}</p>
           </div>
@@ -190,7 +148,7 @@
     </div>
     <Page :current="1" :total="10" simple class="page flex-cc" />
     <BackTop :bottom="0"></BackTop>
-    <div class="footer c000 fs15">©2019 展讯版权所有 <a href="http://sh.beian.miit.gov.cn" target="_blank" class="c666 fs15">  赣ICP备18011759号-2 </a> </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -199,15 +157,16 @@ import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
 import { timeAgo } from "./../../util/formatTime";
 import upload from '@/components/upload/Upload'
+import HeadBar from '@/components/headBar/HeadBar'
+import Footer from '@/components/footer/Footer'
 export default {
   components: {
-    upload
+    upload,
+    HeadBar,
+    Footer
   },
   data() {
     return {
-      userInfo: {},
-      theme_color: "primary",
-      message: 4,
       articalList: [],
       artical: {
         title: "",
@@ -218,41 +177,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ user: "userInfo" })
+    ...mapGetters(["userInfo"])
   },
+
   methods: {
-    getUserInfo() {
-      this.$get("/userInfo", {}).then(msg => {
-        this.userInfo = msg.data || {};
-        this.$store.dispatch("setUserInfo", msg.data);
-      });
-    },
-
-    select(name) {
-      if (name == "1") {
-        this.$router.push("/");
-      } else if (name == "2-1") {
-        this.$Message.info({
-          content: "个人中心在哪里呢?"
-        });
-      } else if (name == "2-2") {
-        this.loginOut();
-      } else if (name == "3") {
-        Cookie.remove("token");
-        this.$store.dispatch("clearUserInfo");
-        this.$router.push("/login");
-      } else if (name == "4") {
-        this.$Message.info({
-          content: "我的消息呢?"
-        });
-      }
-    },
-
-    loginOut() {
-      Cookie.remove("token");
-      this.$store.dispatch("clearUserInfo");
-      this.$router.push("/login");
-    },
 
     sendArtical() {
       const { title, content } = this.artical;
@@ -267,7 +195,7 @@ export default {
       this.$get("/artical/sendArtical", {
         title,
         content,
-        author: JSON.stringify(this.user)
+        author: JSON.stringify(this.userInfo)
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("发帖成功");
@@ -311,7 +239,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.articalList[index].answer.unshift({
-            user_info: this.user,
+            user_info: this.userInfo,
             content: this.replyContent,
             time: new Date().getTime()
           });
@@ -323,14 +251,17 @@ export default {
 
     timesAgo(time) {
       return timeAgo(time);
+    },
+
+    articalDetail() {
+      this.$router.push('/artical')
     }
   },
   mounted() {
-    this.getUserInfo();
     this.getArticalList();
     this.$Notice.config({
         top: 60,
-        duration: 5
+        duration: 2
     });
     this.$Notice.info({
       title: '不得已, 回复被删除啦 (ノへ￣、)'
@@ -342,72 +273,54 @@ export default {
 
 
 <style scoped lang='less'>
+@media screen and (max-width: 1236px){
+  .left{
+    display: none !important;
+  }
+}
+@media screen and (max-width: 920px){
+  .right{
+    display: none !important;
+  }
+}
 .home {
   width: 100%;
   height: 100%;
-  background:url("./../../assets/img/bgc.jpg") repeat left top;
+  // background:url("./../../assets/img/bgc.jpg") repeat left top;
   // background: #e7e7e7;
   // background-size: cover;
   overflow: auto;
   zoom: 1;
 }
 .ivu-menu-primary {
-  background: linear-gradient(to right top, #4158d0, #c850c0);
   box-shadow: 0 0 5px #666;
   opacity: 0.9;
   width: calc(100vw - 12px);
   position: fixed;
   left: 0;
   top: 0;
+  .bgc; 
 }
-.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item:hover,
-.ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu:hover {
-  background: linear-gradient(to right top, #4158d0, #c850c0);
-}
-.h1 {
-  height: 46px;
-  margin-top: 7px;
-  img {
-    height: 100%;
-  }
-}
-.info {
-  display: inline-block;
-  position: relative;
-  .dot {
-    position: absolute;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 13px;
-    font-size: 13px;
-    background-color: red;
-    color: #fff;
-    width: 14px;
-    height: 14px;
-    right: -11px;
-    top: 12px;
-  }
-}
-.user-img {
-  vertical-align: -7px;
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  margin-right: 2px;
-}
+// .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item:hover,
+// .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu:hover {
+//   background: linear-gradient(to right top, #4158d0, #c850c0);
+// }
+
 .content {
-  width: 1200px;
+  // width: 1200px;
   // height: 1400px;
   // background-color: #ccc;
   margin: 100px auto;
   margin-bottom: 60px;
-  color: #4158d0;
+  // color: #4158d0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
+  .c;
   .left {
-    width: 23%;
+    width: 276px;
     height: 100%;
+    margin-right: 28px;
     // background-color: #ccc;
     .info {
       width: 100%;
@@ -417,7 +330,8 @@ export default {
         width: 100%;
         height: 100px;
         position: relative;
-        background-color: #4158d0;
+        // background-color: #4158d0;
+        .bgc;
         .info-img-box {
           width: 100px;
           height: 100px;
@@ -463,7 +377,8 @@ export default {
           transition: all 0.3s;
           &:hover > i,
           &:hover > span {
-            color: #4158d0 !important;
+            // color: #4158d0 !important;
+            .c;
             font-weight: bold;
           }
         }
@@ -471,19 +386,23 @@ export default {
       .info-foot {
         width: 100%;
         height: 20px;
-        background-color: #4158d0;
+        // background-color: #4158d0;
+        .c;
       }
     }
   }
   .mid {
-    width: 50%;
+    width: 90%;
+    max-width: 600px;
+    min-width: 375px;
     height: 100%;
     // background-color: #ccc;
     .head {
       width: 100%;
       height: 70px;
       box-shadow: 0 0 2px #ccc;
-      border-top: 6px solid #4158d0;
+      // border-top: 6px solid #4158d0;
+      .c;
       background-color: #fff;
       text-align: center;
       line-height: 70px;
@@ -583,7 +502,8 @@ export default {
           cursor: pointer;
           &:hover > i,
           &:hover > span {
-            color: #4158d0 !important;
+            // color: #4158d0 !important;
+            .c;
             font-weight: bold;
             // font-size: 16px;
           }
@@ -649,8 +569,9 @@ export default {
     }
   }
   .right {
-    width: 23%;
+    width: 276px;
     height: 100%;
+    margin-left: 28px;
     // background-color: #ccc;
     .send {
       width: 100%;
@@ -659,7 +580,8 @@ export default {
       .send-head {
         width: 100%;
         height: 50px;
-        background-color: #4158d0;
+        // background-color: #4158d0;
+        .bgc;
       }
       .send-content {
         width: 100%;
@@ -693,7 +615,8 @@ export default {
           width: 100%;
           height: 30px;
           border-radius: 4px;
-          background-color: #4158d0;
+          // background-color: #4158d0;
+          .bgc;
           margin-top: 12px;
           cursor: pointer;
           &:active {
@@ -704,14 +627,7 @@ export default {
     }
   }
 }
-.footer {
-  width: 100%;
-  height: 58px;
-  text-align: center;
-  line-height: 60px;
-  font-size: 18px;
-  background-color: #fff;
-}
+
 i {
   margin-right: 3px;
 }
@@ -737,7 +653,8 @@ i {
   .sort-head {
     width: 100%;
     height: 50px;
-    background-color: #4158d0;
+    // background-color: #4158d0;
+    .bgc;
   }
   .sort-body {
     padding: 20px 40px;
@@ -783,4 +700,10 @@ i {
 //   height: 50px;
 //   line-height: 50px;
 // }
+.c{
+  color: #2d8cf0
+}
+.bgc{
+  background-color: #2d8cf0;
+}
 </style>

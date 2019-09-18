@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box flex-cc" :style="style">
-      <img :src="$crop(imgurl, 92, 92, time)" alt="" ref="img" accept="image/*" class="img" v-if="avatar && imgurl">
+      <img :src="$crop(imgurl, 88, 88, time)" alt="" ref="img" accept="image/*" class="img" v-if="avatar && imgurl">
       <Icon type="ios-contact" class="cp no-avatar" v-else/>
       <div class="tips flex-cc fs15 cfff fwl">{{imgurl ? '更换头像' : '上传头像'}}</div>
       <input type="file" @change='fileChange($event)' class="input cp" title="">
@@ -19,9 +19,7 @@ export default {
     return {
       imgurl: this.avatar,
       style: {
-        'border-radius': '50%',
-        "width": this.imgurl ? '92px' : '100px',
-        "height": this.imgurl ? '92px' : '100px',
+        'border-radius': '50%'
       },
       token: '',
       time: new Date().getTime()
@@ -38,8 +36,8 @@ export default {
       this.imgurl = this.avatar || '';
       this.style = {
         'border-radius': '50%',
-        "width": this.avatar ? '92px' : '100px',
-        "height": this.avatar ? '92px' : '100px',
+        // "width": this.avatar ? '88px' : '100px',
+        // "height": this.avatar ? '88px' : '100px',
       }
     },
   },
@@ -113,12 +111,13 @@ export default {
 
 <style scoped lang='less'>
   .box{
-    width: 92px;
-    height: 92px;
-    border-radius: 10px;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
     position: relative;
     // border: 1px solid #ccc;
     background-color: #fff;
+    // border: 12px solid #fff;
     overflow: hidden;
     &:hover .tips{
       z-index: 1;
@@ -132,8 +131,8 @@ export default {
       .fs95
     }
     .input{
-      width: 100px;
-      height: 100px;
+      width: 88px;
+      height: 88px;
       border: none;
       outline: none;
       opacity: 0;
@@ -144,15 +143,16 @@ export default {
       z-index: 2;
     }
     .img{
-      width: 100px;
-      height: 100px;
+      width: 88px;
+      height: 88px;
+      border: 1px solid #ccc;
     }
     .tips{
       position: absolute;
       left: 0;
       top: 0;
-      width: 100px;
-      height: 100px;
+      width: 88px;
+      height: 88px;
       background-color: rgba(0,0,0,0.3);
       z-index: -1
     }
