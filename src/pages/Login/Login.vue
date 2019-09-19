@@ -3,7 +3,7 @@
     <!-- <upload /> -->
     <div class="container">
       <div class="item">
-        <img src="./../../assets/img/login_usr.png" alt="user">
+        <img src="./../../../static/img/login_usr.png" alt="user">
       </div> 
       <div class="item">  
         <h3 class="title">账号{{way}}</h3>

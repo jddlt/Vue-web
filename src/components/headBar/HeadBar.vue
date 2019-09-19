@@ -1,5 +1,6 @@
 <template>
-  <Menu
+  <div>
+    <Menu
     enu
     mode="horizontal"
     :theme="theme_color"
@@ -10,7 +11,7 @@
   >
     <MenuItem name="1" class="mml10">
       <h1 class="h1">
-        <img src="./../../assets/img/logo.png" alt="展讯" />
+        <img src="./../../../static/img/logo.png" alt="展讯" />
       </h1>
     </MenuItem>
 
@@ -36,6 +37,10 @@
       </span>
     </MenuItem>
   </Menu>
+  <div class="block">
+
+  </div>
+  </div>
 </template>
 
 <script>
@@ -95,7 +100,10 @@ export default {
 
 
 <style scoped lang='less'>
-
+.head-bar{
+  position: fixed;
+  width: 100%;
+}
 .h1 {
   height: 46px;
   margin-top: 7px;
@@ -146,5 +154,10 @@ export default {
   .ivu-menu-primary{
     width: 100%;
   }
+}
+.block{
+  width: 100%;
+  height: 60px;
+  opacity: 0;
 }
 </style>

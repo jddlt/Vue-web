@@ -31,8 +31,8 @@
           <div class="info-foot"></div>
         </div>
         <div class="block flex-cc bs">
-          <img src="./../../assets/img/gif_head.jpg" alt="gif_head" />
-          <img src="./../../assets/img/gif.gif" alt="gif" />
+          <img src="./../../../static/img/gif_head.jpg" alt="gif_head" />
+          <img src="./../../../static/img/gif.gif" alt="gif" />
         </div>
       </div>
       <div class="mid">
@@ -51,7 +51,7 @@
             </div>
             <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
           </div>
-          <div class="list-body" @click="articalDetail">
+          <div class="list-body" @click="articalDetail(item._id)">
             <p class="list-title fs16 c333 fwb cp">{{item.title}}</p>
             <p class="list-content fs15 c333 fwl">{{item.content}}</p>
           </div>
@@ -70,7 +70,7 @@
               <i class="iconfont fs16 c999 fwb" v-if="item.open">&#xe661;</i>
               <i class="iconfont fs15 c999 ml20">&#xe61a;</i>
               <span class="fs15 c999 mt-2">{{item.answer.length || 0}}</span>
-              <!-- <img src="./../../assets/img/love.jpg" alt="love"> -->
+              <!-- <img src="./../../../static/img/love.jpg" alt="love"> -->
             </div>
           </div>
           <div
@@ -260,8 +260,10 @@ export default {
       return timeAgo(time);
     },
 
-    articalDetail() {
-      this.$router.push("/artical");
+    articalDetail(_id) {
+      this.$router.push({
+        path:  `/artical?id=${_id}`
+      });
     }
   },
   mounted() {
@@ -283,7 +285,7 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  // background:url("./../../assets/img/bgc.jpg") repeat left top;
+  // background:url("./../../../static/img/bgc.jpg") repeat left top;
   // background: #e7e7e7;
   // background-size: cover;
   overflow: auto;
@@ -307,7 +309,7 @@ export default {
   // width: 1200px;
   // height: 1400px;
   // background-color: #ccc;
-  margin: 100px auto;
+  margin: 30px auto;
   margin-bottom: 60px;
   // color: #4158d0;
   display: flex;
@@ -389,7 +391,7 @@ export default {
     }
   }
   .mid {
-    width: 90%;
+    width: 92%;
     max-width: 600px;
     min-width: 325px;
     height: 100%;

@@ -56,3 +56,30 @@ export function timeAgo (timestamp) {
   }
   return '刚刚';
 };
+
+export function formatNumber(n) {
+    n = n.toString()
+    return n[1] ? n : '0' + n
+}
+
+export function formatTime(time, sep = '-') {
+    const date = new Date(Number(time))
+    var year = date.getFullYear()
+    var month = date.getMonth() + 1
+    var day = date.getDate()
+    var hour = date.getHours()
+    var minute = date.getMinutes()
+    var second = date.getSeconds()
+    return [year, month, day].map(formatNumber).join(sep) + ' ' + [hour, minute, second].map(formatNumber).join(':')
+}
+
+export function toTime(time) {
+    const date = new Date(Number(time))
+    var year = date.getFullYear()
+    var month = date.getMonth() + 1
+    var day = date.getDate()
+    return `${year}年${String(month).padStart(2, 0)}月${String(day).padStart(2, 0)}日`
+}
+
+
+
