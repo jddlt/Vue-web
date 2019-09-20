@@ -5,7 +5,7 @@
       <div class="content bs">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc">
-              <img :src="$crop((articalInfo.author && articalInfo.author.avatar), 45, 45, time)" alt class="list-img cp" />
+              <img :src="$crop((articalInfo.author && articalInfo.author.avatar), 45, 45, time)" alt class="list-img cp bs" />
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp fwb">{{articalInfo.author && articalInfo.author.name}}</span>
                 <span class="lh100">
@@ -32,7 +32,7 @@
 
       </div> -->
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -108,6 +108,7 @@ export default {
     }
     .artical-content{
       width: 100%;
+      min-height: 500px;
       font-size: 15px;
       font-weight: 400;
       line-height: 26px;

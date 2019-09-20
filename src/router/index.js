@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/pages/Login/Login'
 import Home from '@/pages/Home/Home'
 import Artical from '@/pages/Artical/Artical'
+import UserInfo from '@/pages/UserInfo/UserInfo'
 // import Upload from '@/components/upload/Upload'
  
 Vue.use(Router)
@@ -29,6 +30,11 @@ export default new Router({
       path: '/artical',
       name: 'Artical',
       component: Artical
+    },
+    { 
+      path: '/userInfo',
+      name: 'UserInfo',
+      component: UserInfo
     }
   ]
 })

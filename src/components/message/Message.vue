@@ -39,22 +39,22 @@
                 <ul class="commentlist">
                     <li class="commentlist-item" v-for="(item,index) in talkList" :key="'common'+index">
                         <div class="item-left">
-                            <img :src="$crop(item.user_info && item.user_info.avatar, 65, 65, time)" :onerror="$store.state.errorImg" alt="">
+                            <img :src="$crop(item.user_info && item.user_info.avatar, 65, 65, time)" :onerror="$store.state.errorImg" alt="" class="bss cp">
                         </div>
                         <div class="item-right">
                             <p>
                                 <span class="item-name fwb c000 fs14">{{item.user_info && item.user_info.name}}</span>
-                                <span class="item-class">萌萌哒</span>
+                                <span class="item-class">{{item.user_info.label || '萌萌哒'}}</span>
                             </p>
                             <p class="c999 mt4 fs13">{{formatTime(item.time)}}</p>
                             <p v-html="analyzeEmoji(item.content)" class="to-mid mt10 fs17">{{analyzeEmoji(item.content)}}</p>
                         </div>
                     </li>
                 </ul>
-                <Button type="info" class="mt20" long>查看更多</Button>
+                <!-- <Button type="info" class="mt20" long>查看更多</Button> -->
             </div>
-            <div v-else class="tc fs25 c000 fwb no-talk">
-                暂无评论
+            <div v-else class="tc fs24 c000 fwb no-talk">
+                没人评论 (ノへ￣、)
             </div>
         </div>
     </div>

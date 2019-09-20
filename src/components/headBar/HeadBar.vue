@@ -33,7 +33,7 @@
       <!-- <Icon type="ios-contact" class="fs25"/> -->
       <span class="info">
         消息
-        <span class="dot" v-if="message">{{message}}</span>
+        <!-- <span class="dot" v-if="message">{{message}}</span> -->
       </span>
     </MenuItem>
   </Menu>
@@ -52,7 +52,7 @@ export default {
     return {
       theme_color: "primary",
       message: 4,
-      userInfo: this.$store.state.user.userInfo || {},
+      userInfo: (this.$store.state.user && this.$store.state.user.userInfo) || {},
       time: new Date().getTime()
     };
   },
@@ -73,9 +73,10 @@ export default {
       if (name == "1") {
         this.$router.push("/");
       } else if (name == "2-1") {
-        this.$Message.info({
-          content: "个人中心在哪里呢?"
-        });
+        // this.$Message.info({
+        //   content: "个人中心在哪里呢?"
+        // });
+        this.$router.push('/userInfo')
       } else if (name == "2-2") {
         this.loginOut();
       } else if (name == "3") {

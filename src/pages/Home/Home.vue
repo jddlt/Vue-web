@@ -7,12 +7,14 @@
         <div class="info bs">
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
-              <upload :avatar="userInfo.avatar" />
+              <!-- <upload :avatar="userInfo.avatar" /> -->
+              <img :src="$crop(userInfo.avatar, 93, 93, time)" alt="" v-if='userInfo.name' class="info-img bss">
+              <Icon type="ios-contact" class='fs95' v-else/>
             </div>
           </div>
           <div class="info-body flex-c-sc">
             <div class="info-name c000 fwb fs20">{{userInfo.name || '未登录'}}</div>
-            <div class="info-mark c999 fwl fs16">该用户懒得{{userInfo.name ? '写签名' : '登录'}}</div>
+            <div class="info-mark c999 fwl fs16">{{userInfo.name ? (userInfo.tips ? userInfo.tips : '该用户暂未填写签名') : '你还没登陆呢'}}</div>
           </div>
           <div class="info-message flex-sc">
             <div class="message-item flex-cc">
@@ -52,8 +54,8 @@
             <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
-            <p class="list-title fs16 c333 fwb cp">{{item.title}}</p>
-            <p class="list-content fs15 c333 fwl">{{item.content}}</p>
+            <p class="list-title fs16 c333 fwb cp es1">{{item.title}}</p>
+            <p class="list-content fs15 c333 fwl es3">{{item.content}}</p>
           </div>
           <div class="list-foot flex-sc">
             <div class="foot-left flex-c">
@@ -100,7 +102,7 @@
               <div class="talk-btn fs15" @click="reply(item._id, index)">评论</div>
             </div>
             <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
-              <div class="flex-c">
+              <div class="flex-c es1">
                 <img
                   :src="$crop(talk.user_info.avatar, 22, 22, time)"
                   alt
@@ -145,18 +147,17 @@
         <div class="sort bs">
           <div class="sort-head flex-cc fwb fs20 cfff">今日帖子排行</div>
           <div class="sort-body flex-c-s c333 fs15">
-            <div v-for="(item, index) in 9" :key="index" class="sort-item">
+            <div v-for="(item, index) in articalSort" :key="index" class="sort-item" @click='articalDetail(item._id)'>
               <span :class="(index < 3 ? 'fwb red fs16' : 'c000')">{{index + 1}}</span>
-              <span class="sort-name">日月成碧，画栏悬香</span>
+              <span class="sort-name fs14">{{item.title}}</span>
             </div>
-            <div class="sort-foot tc fs16 c000 fwb w100">加载更多 ></div>
+            <!-- <div class="sort-foot tc fs16 c000 fwb w100">加载更多 ></div> -->
           </div>
         </div>
       </div>
     </div>
     <Page :current="1" :total="10" simple class="page flex-cc" />
-    <BackTop :bottom="0"></BackTop>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -181,7 +182,8 @@ export default {
         content: ""
       },
       replyContent: "",
-      time: new Date().getTime()
+      time: new Date().getTime(),
+      articalSort: []
     };
   },
   computed: {
@@ -199,7 +201,7 @@ export default {
         this.$Message.info("内容不得少于15个字符");
         return;
       }
-      this.$get("/artical/sendArtical", {
+      this.$post("/artical/sendArtical", {
         title,
         content,
         author: JSON.stringify(this.userInfo)
@@ -219,6 +221,14 @@ export default {
           this.articalList.forEach((val, index) => {
             val.answer = val.answer.reverse();
           });
+        }
+      });
+    },
+
+    getArticalSort() {
+      this.$get("/artical/sort", {}).then(res => {
+        if (res.code == 200) {
+          this.articalSort = res.data;
         }
       });
     },
@@ -268,13 +278,15 @@ export default {
   },
   mounted() {
     this.getArticalList();
-    this.$Notice.config({
-      top: 60,
-      duration: 2
-    });
-    this.$Notice.info({
-      title: "不得已, 回复被删除啦 (ノへ￣、)"
-    });
+    this.getArticalSort();
+    this.$Message.info('MarkDown 语法即将支持')
+    // this.$Notice.config({
+    //   top: 60,
+    //   duration: 2
+    // });
+    // this.$Notice.info({
+    //   title: "不得已, 回复被删除啦 (ノへ￣、)"
+    // });
   },
   beforeDestroy() {}
 };
@@ -284,12 +296,8 @@ export default {
 <style scoped lang='less'>
 .home {
   width: 100%;
-  height: 100%;
-  // background:url("./../../../static/img/bgc.jpg") repeat left top;
-  // background: #e7e7e7;
-  // background-size: cover;
-  overflow: auto;
-  zoom: 1;
+  // height: 100%;
+  padding-bottom: 1px;
 }
 .ivu-menu-primary {
   box-shadow: 0 0 5px #666;
@@ -309,8 +317,11 @@ export default {
   // width: 1200px;
   // height: 1400px;
   // background-color: #ccc;
+  width: 100%;
+  // height: 100%;
   margin: 30px auto;
-  margin-bottom: 60px;
+  margin-bottom: 0;
+  // margin-bottom: 60px;
   // color: #4158d0;
   display: flex;
   justify-content: center;
@@ -386,7 +397,7 @@ export default {
         width: 100%;
         height: 20px;
         // background-color: #4158d0;
-        .c;
+        .bgc;
       }
     }
   }
@@ -473,7 +484,7 @@ export default {
         border-bottom: 1px solid #ccc;
         &:hover {
           // color: #666;
-          opacity: 0.65;
+          opacity: 0.85;
         }
         .list-title {
           width: 100%;
@@ -483,7 +494,8 @@ export default {
         .list-content {
           width: 100%;
           // height: 60px;
-          padding: 8px 0 15px 0;
+          // padding: 8px 0 15px 0;
+          margin: 8px 0 15px 0;
           text-indent: 2em;
           line-height: 150%;
           transition: opacity 0.2s;
@@ -661,12 +673,16 @@ i {
     box-sizing: border-box;
     .sort-item {
       width: 100%;
-      margin-bottom: 15px;
+      margin-bottom: 18px;
+      margin-left: 1.8em;
+      text-indent: -1.7em;
       cursor: pointer;
       span:last-of-type {
         margin-left: 12px;
       }
       .sort-name {
+        // margin-left: 2em;
+        // text-indent: -2em;
         &:hover {
           text-decoration: underline;
           // background-color: #000;
@@ -680,7 +696,9 @@ i {
 }
 .img-format {
   width: 25px;
+  min-width: 25px;
   height: 25px;
+  min-height: 25px;
   border-radius: 50%;
 }
 .img-format-min {

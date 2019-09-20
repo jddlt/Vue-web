@@ -74,7 +74,7 @@ export default {
           if(msg.code == 200){
             this.$Message.success({  content: '登陆成功' })
             setTimeout(() => {
-              this.$router.push('/')
+              this.$router.go(-1)
             }, 1500)
           }
         })
