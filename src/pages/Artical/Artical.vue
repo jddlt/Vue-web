@@ -4,7 +4,7 @@
     <div class="artical">
       <div class="content bs">
           <div class="list-head flex-sc">
-            <div class="list-head-left flex-sc">
+            <div class="list-head-left flex-sc" @click="showInfo(articalInfo.author)">
               <img :src="$crop((articalInfo.author && articalInfo.author.avatar), 45, 45, time)" alt class="list-img cp bs" />
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp fwb">{{articalInfo.author && articalInfo.author.name}}</span>
@@ -49,6 +49,7 @@
 
       </div> -->
     </div>
+    <InfoDialog :isOpen='isOpen' :userInfo='showUserInfo' :time='time'></InfoDialog>
     <!-- <Footer></Footer> -->
   </div>
 </template>
@@ -60,12 +61,14 @@ import Message from '@/components/message/Message'
 import { mapGetters } from 'vuex'
 import { VueShowdown } from 'vue-showdown'
 import { toTime } from '@/util/formatTime.js'
+import InfoDialog from "@/components/infoDialog/InfoDialog";
 export default {
   components: {
     HeadBar,
     Footer,
     Message,
-    VueShowdown
+    VueShowdown,
+    InfoDialog
   },
   computed: {
     ...mapGetters(['userInfo'])
@@ -75,7 +78,9 @@ export default {
       time: new Date().getTime(),
       articalInfo: {},
       talkList: [],
-      id: ''
+      id: '',
+      isOpen: false,
+      showUserInfo: {}
     };
   },
   mounted() {
@@ -97,6 +102,14 @@ export default {
             this.talkList = (res.data.answer && res.data.answer.reverse()) || []
           }
         })
+      },
+      showInfo(author) {
+        this.isOpen = true,
+        this.showUserInfo = author
+      },
+
+      closeInfo() {
+        this.isOpen = false
       }
   },
   beforeDestroy() {}
@@ -201,6 +214,17 @@ export default {
     display: none;
   }
 }
+@media screen and (max-width: 400px) {
+  .info{
+    display: none;
+  }
+  .artical, .content{
+    border-radius: 4px !important;
+  }
+  .content{
+    margin-top: 25px !important;
+  }
+}
 </style>
 <style>
 @import url('github-markdown-css');
@@ -220,10 +244,12 @@ ul>li{
 ol>li{
   list-style: decimal;
 }
-
 @media (max-width: 767px) {
     .markdown-body {
-        padding: 15px;
+        padding: 10px 0px;
+    }
+    .content{
+      padding: 0 15px !important;
     }
 }
 </style>

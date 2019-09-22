@@ -62,7 +62,10 @@ export default {
     ...mapGetters(['userInfo'])
   },
   mounted() {
-    window.addEventListener('resize', this.handleResize, false);
+    const width = document.documentElement.clientWidth  || document.body.clientWidth
+    if(width > 500) {
+      window.addEventListener('resize', this.handleResize, false);
+    }
     this.handleFirstEnter()
   },
   methods: {
@@ -118,6 +121,10 @@ export default {
           this.editArtical = true
         }
     }
+  },
+  destroyed() {
+    console.log('awsl');
+    window.removeEventListener('resize', this.handleResize, false)
   }
 };
 </script> 
@@ -198,7 +205,12 @@ export default {
 }
 .mp30{
   margin-top: 15px;
-  padding-bottom: 30px;
+  padding-bottom: 25px;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 
 @media screen and (min-width: 500px) {

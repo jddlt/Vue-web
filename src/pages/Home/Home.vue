@@ -8,8 +8,8 @@
           <div class="info-head flex-cc">
             <div class="info-img-box flex-cc">
               <!-- <upload :avatar="userInfo.avatar" /> -->
-              <img :src="$crop(userInfo.avatar, 93, 93, time)" alt="" v-if='userInfo.name' class="info-img bss">
-              <Icon type="ios-contact" class='fs95' v-else/>
+              <img :src="$crop(userInfo.avatar, 93, 93, time)" alt="" v-if='userInfo.name' class="info-img bss cp" @click="showInfo(userInfo)">
+              <Icon type="ios-contact" class='fs95 cp' v-else/>
             </div>
           </div>
           <div class="info-body flex-c-sc">
@@ -41,7 +41,7 @@
         <div class="head bs">今日话题</div>
         <div class="list bs" v-for="(item, index) in articalList" :key="item._id">
           <div class="list-head flex-sc">
-            <div class="list-head-left flex-sc">
+            <div class="list-head-left flex-sc" @click="showInfo(item.author)">
               <img :src="$crop(item.author.avatar, 35, 35, time)" alt class="list-img cp" />
               <div class="list-name flex-c-s">
                 <span class="fs14 c333 cp">{{item.author.name}}</span>
@@ -156,7 +156,8 @@
         </div>
       </div>
     </div>
-    <Page :current="1" :total="10" simple class="page flex-cc" />
+    <Page :current="1" :total="total" simple class="page flex-cc" @on-change='changeIndex'/>
+    <InfoDialog :isOpen='isOpen' :userInfo='showUserInfo' :time='time'></InfoDialog>
     <!-- <Footer></Footer> -->
   </div>
 </template>
@@ -168,11 +169,13 @@ import { timeAgo } from "./../../util/formatTime";
 import upload from "@/components/upload/Upload";
 import HeadBar from "@/components/headBar/HeadBar";
 import Footer from "@/components/footer/Footer";
+import InfoDialog from "@/components/infoDialog/InfoDialog";
 export default {
   components: {
     upload,
     HeadBar,
-    Footer
+    Footer,
+    InfoDialog
   },
   data() {
     return {
@@ -183,7 +186,10 @@ export default {
       },
       replyContent: "",
       time: new Date().getTime(),
-      articalSort: []
+      articalSort: [],
+      total: 0,
+      isOpen: false,
+      showUserInfo: {}
     };
   },
   computed: {
@@ -214,10 +220,13 @@ export default {
       });
     },
 
-    getArticalList() {
-      this.$get("/artical", {}).then(res => {
+    getArticalList(index = 1) {
+      this.$get("/artical", {
+        pageIndex: index
+      }).then(res => {
         if (res.code == 200) {
           this.articalList = res.data;
+          this.total = res.total
           this.articalList.forEach((val, index) => {
             val.answer = val.answer.reverse();
           });
@@ -274,12 +283,25 @@ export default {
       this.$router.push({
         path:  `/artical?id=${_id}`
       });
+    },
+
+    changeIndex(index) {
+      this.getArticalList(index)
+    },
+
+    showInfo(author) {
+      this.isOpen = true,
+      this.showUserInfo = author
+    },
+
+    closeInfo() {
+      this.isOpen = false
     }
   },
   mounted() {
     this.getArticalList();
     this.getArticalSort();
-    this.$Message.info('MarkDown 语法即将支持')
+    // this.$Message.info('MarkDown 语法即将支持')
     // this.$Notice.config({
     //   top: 60,
     //   duration: 2
@@ -329,7 +351,7 @@ export default {
   .c;
   .left {
     width: 276px;
-    height: 100%;
+    height: 100%; 
     margin-right: 28px;
     // background-color: #ccc;
     .info {
@@ -739,6 +761,14 @@ i {
 @media screen and (max-width: 600px) {
   .head{
     letter-spacing: 27px !important;
+    // display: none;
+    height: 44px !important;
+    font-size: 21px !important;
+    line-height: 44px !important;
+    margin-top: 15px;
+  }
+  .content{
+    margin-top: 0px;
   }
   .w80{
     width: 85%;

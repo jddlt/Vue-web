@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <router-view class="router"/>
-    <Footer></Footer>
-    <BackTop :bottom="100"></BackTop>
+    <Footer v-if="isShow"></Footer>
+    <BackTop :bottom="75" class="op"></BackTop>
   </div>
 </template>
 
@@ -10,8 +10,22 @@
 import Footer from '@/components/footer/Footer'
 export default {
   name: 'App',
+  data() {
+    return {
+      isShow: true
+    }
+  },
   components: {
     Footer
+  },
+  watch: {
+    $route: function() {
+      if(this.$route.path === '/login') {
+        this.isShow = false
+      } else {
+        this.isShow = true
+      }
+    }
   }
 }
 </script>
@@ -27,5 +41,8 @@ export default {
 .router{
   background: url("../static/img/bgc.jpg") repeat fixed left top;
   min-height: calc(100vh - 54px);
+}
+.op{
+  opacity: 0.3;
 }
 </style>

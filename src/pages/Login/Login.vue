@@ -2,7 +2,7 @@
   <div class="login">
     <!-- <upload /> -->
     <div class="container">
-      <div class="item">
+      <div class="item my-img">
         <img src="./../../../static/img/login_usr.png" alt="user">
       </div> 
       <div class="item">  
@@ -142,10 +142,11 @@ h3{
   justify-content: center;
   align-items: center;
   .container{
-    width: 50vw;
-    min-width: 600px;
-    height: 70vh;
-    min-height: 400px;
+    width: 92%;
+    max-width: 768px;
+    min-width: 325px;
+    height: 505px;
+    // min-height: 400px;
     background-color: #FFFFFF;
     border-radius: 15px;
     display: flex;
@@ -208,7 +209,14 @@ h3{
     }
   }
 }
-
+input:-internal-autofill-selected /deep/ {
+  background-color: #eee !important;
+}
+@media screen and (max-width: 870px) {
+  .my-img{
+    display: none !important;
+  }
+}
 
 
 </style>
