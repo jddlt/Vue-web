@@ -21,7 +21,7 @@
             <!-- <div class="info-mark c999 fwl fs16">{{userInfo.name ? (userInfo.tips ? userInfo.tips : '该用户暂未填写签名') : '你还没登陆呢'}}</div> -->
 
           </div>
-        <ButtonGroup class="flex mt10">
+        <ButtonGroup class="flex mt10 w100">
             <Button class="flex-1" @click="close">关闭</Button>
             <Button type="primary" class="flex-1" @click="addFriend">加好友</Button>
         </ButtonGroup>
@@ -66,13 +66,13 @@ export default {
     left: 50%;
     top: 50%;
     transform: translateY(-50%);
-    margin-left: -138px;
+    margin-left: -130px;
     overflow: hidden;
     border-radius: 6px;
     transition: all 0.2s;
 }
 .scale{
-    transform: translateY(-50%) scale(0)
+    transform: translateY(-50%) scale(0) 
 }
 .left {
     width: 100%;

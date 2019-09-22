@@ -16,7 +16,7 @@ Router.prototype.push = function push(location) {
 }
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -42,12 +42,16 @@ export default new Router({
       path: '/writeArtical', 
       name: 'WriteArtical',
       component: WriteArtical
+    },
+    { 
+      path: '/*', 
+      redirect: '/'
     }
   ],
   scrollBehavior: (to, from, savePosition) => {
     // 如果savePosition存在，则直接滚动到相应位置
     if (savePosition) {
-      return savePosition
+      return savePosition 
     }
     // 否则直接回到顶部
     return {x: 0, y: 0}
