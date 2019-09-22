@@ -29,10 +29,17 @@
       <Icon type="ios-contact" class="fs25" />登录
     </MenuItem>
 
-    <MenuItem name="4" class="fr" v-if="userInfo.name">
+    <MenuItem name="4" class="fr msg" v-if="userInfo.name">
       <!-- <Icon type="ios-contact" class="fs25"/> -->
       <span class="info">
         消息
+        <!-- <span class="dot" v-if="message">{{message}}</span> -->
+      </span>
+    </MenuItem>
+    <MenuItem name="5" class="fr" v-if="userInfo.name">
+      <!-- <Icon type="ios-contact" class="fs25"/> -->
+      <span class="info">
+        发帖
         <!-- <span class="dot" v-if="message">{{message}}</span> -->
       </span>
     </MenuItem>
@@ -87,6 +94,8 @@ export default {
         this.$Message.info({
           content: "我的消息呢?"
         });
+      } else if (name == 5) {
+        this.$router.push('/writeArtical')
       }
     },
     loginOut() {
@@ -142,7 +151,7 @@ export default {
 .mmr10{
   margin-right: 10px;
 }
-@media screen and (max-width: 375px){
+@media screen and (max-width: 440px){
   .ivu-menu-horizontal .ivu-menu-item, .ivu-menu-horizontal .ivu-menu-submenu{
     padding: 0 12px;
   }
@@ -155,10 +164,16 @@ export default {
   .ivu-menu-primary{
     width: 100%;
   }
+  .msg{
+    display: none;
+  }
 }
 .block{
   width: 100%;
   height: 60px;
   opacity: 0;
+}
+li{
+  list-style: none;
 }
 </style>

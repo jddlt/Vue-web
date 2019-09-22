@@ -158,10 +158,11 @@ import Upload from '@/components/upload/Upload'
 
 <style scoped lang='less'>
 .container{
-    width: 92%;
+    width: 94%;
     max-width: 900px;
     min-width: 325px;
     margin: 30px auto;
+    margin-bottom: 0;
 }
 .userInfoBox .avatarlist{
     position: relative;
@@ -227,7 +228,7 @@ import Upload from '@/components/upload/Upload'
     border-bottom: 1px solid transparent;
 }
 .saveInfobtn{
-    margin: 20px 0;
+    padding: 20px 0 30px 0;
     // text-align: center;
 }
 .saveInfobtn a{
@@ -239,5 +240,8 @@ import Upload from '@/components/upload/Upload'
 }
 .userInfoBox .fa-asterisk{
     color: #DF2050;
+}
+li{
+    list-style: none;
 }
 </style>

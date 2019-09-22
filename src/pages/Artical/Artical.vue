@@ -20,9 +20,26 @@
           <div class="artical-title fs-big fwb tc">
             {{articalInfo.title}}
           </div>
-          <div class="artical-content">
+          <!-- <div class="artical-content">
             {{articalInfo.content}}
-          </div>
+          </div> -->
+          <article class="artical-content markdown-body">
+            <VueShowdown 
+              :markdown='articalInfo.content || ""'
+              flavor="github"
+              :options="{ 
+                  emoji: true, 
+                  strikethrough: true,
+                  table: true,
+                  tasklists: true,
+                  smoothLivePreview: true,
+                  smartIndentationFix: true,
+                  openLinksInNewWindow: true,
+                  backslashEscapesHTMLTags: true,
+                  ghCompatibleHeaderId: true
+                }"
+            ></VueShowdown>
+        </article>
           <Divider :dashed= true>全文完</Divider>
           <div class="message">
             <Message :talkList='talkList' :id='id'></Message>
@@ -41,12 +58,14 @@ import HeadBar from '@/components/headBar/HeadBar'
 import Footer from '@/components/footer/Footer'
 import Message from '@/components/message/Message'
 import { mapGetters } from 'vuex'
+import { VueShowdown } from 'vue-showdown'
 import { toTime } from '@/util/formatTime.js'
 export default {
   components: {
     HeadBar,
     Footer,
-    Message
+    Message,
+    VueShowdown
   },
   computed: {
     ...mapGetters(['userInfo'])
@@ -75,7 +94,7 @@ export default {
             console.log('this.articalInfo', this.articalInfo);
             
             this.id = this.$route.query.id;
-            this.talkList = res.data.answer || []
+            this.talkList = (res.data.answer && res.data.answer.reverse()) || []
           }
         })
       }
@@ -92,7 +111,7 @@ export default {
   border-radius: 10px;
   // margin-top: 30px;
   .content{
-    width: 92%;
+    width: 94%;
     max-width: 900px;
     min-width: 325px;
     padding: 8px 25px;
@@ -102,17 +121,20 @@ export default {
     margin: 35px 0;
     // text-indent: 2em;
     overflow: hidden;
+    
     .artical-title{
       width: 100%;
       margin-top: 20px;
+      user-select: text;
     }
     .artical-content{
       width: 100%;
-      min-height: 500px;
+      min-height: 400px;
       font-size: 15px;
-      font-weight: 400;
-      line-height: 26px;
-      white-space: pre-wrap;
+      user-select: text;
+      // font-weight: 400;
+      // line-height: 26px;
+      // white-space: pre-wrap;
     }
     .list-head {
         width: 100%;
@@ -178,5 +200,30 @@ export default {
   .info{
     display: none;
   }
+}
+</style>
+<style>
+@import url('github-markdown-css');
+.markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+}
+*{
+  user-select: text;
+}
+ul>li{
+  list-style: initial;
+}
+ol>li{
+  list-style: decimal;
+}
+
+@media (max-width: 767px) {
+    .markdown-body {
+        padding: 15px;
+    }
 }
 </style>

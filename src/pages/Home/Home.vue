@@ -402,7 +402,7 @@ export default {
     }
   }
   .mid {
-    width: 92%;
+    width: 94%;
     max-width: 600px;
     min-width: 325px;
     height: 100%;
@@ -639,7 +639,9 @@ export default {
     }
   }
 }
-
+li{
+  list-style: none;
+}
 i {
   margin-right: 3px;
 }
