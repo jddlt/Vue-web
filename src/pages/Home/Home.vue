@@ -23,7 +23,7 @@
             </div>
             <div class="message-item flex-cc">
               <i class="iconfont fs14 c999">&#xe60c;</i>
-              <span class="fs15 c999 ml5 mt-1">{{userInfo.likes || 0}}</span>
+              <span class="fs15 c999 ml5 mt-1">{{0}}</span>
             </div>
             <div class="message-item flex-cc">
               <i class="iconfont fs15 c999">&#xe6b0;</i>
@@ -51,7 +51,7 @@
                 </span>
               </div>
             </div>
-            <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
+            <i :class="'list-like iconfont fs22 cccc flex-cc' + (((bigger == index) && (item.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (item.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(item._id, index, item.likes)">&#xe61d;</i>
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
             <p class="list-title fs16 c333 fwb cp es1">{{item.title}}</p>
@@ -61,7 +61,7 @@
             <div class="foot-left flex-c">
               <span class="list-message flex-cc">
                 <i class="iconfont fs15 c999">&#xe60c;</i>
-                <span class="fs15 c999">{{item.likes || 0}}</span>
+                <span class="fs15 c999 ml2">{{item.collect || 0}}</span>
               </span>
               <span class="list-message flex-cc ml20">
                 <i class="iconfont fs15 c999">&#xe6a1;</i>
@@ -189,7 +189,11 @@ export default {
       articalSort: [],
       total: 0,
       isOpen: false,
-      showUserInfo: {}
+      showUserInfo: {},
+      bigger: NaN,
+      timer: 0,
+      pageIndex: 1,
+      times: 0
     };
   },
   computed: {
@@ -287,6 +291,7 @@ export default {
 
     changeIndex(index) {
       this.getArticalList(index)
+      this.pageIndex = index
     },
 
     showInfo(author) {
@@ -296,6 +301,26 @@ export default {
 
     closeInfo() {
       this.isOpen = false
+    },
+
+    iLike(id, index, likes) {
+      this.times ++;
+      if()
+      clearTimeout(this.timer)
+      this.bigger = index;
+      this.$get('/artical/like', {
+        id,
+        is_like: !likes.includes(this.userInfo._id)
+      }).then(res => {
+        if(res.code == 200) {
+          this.getArticalList(this.pageIndex);
+          this.$Message.info(res.msg)
+        }
+      })
+      this.timer = setTimeout(() => {
+        this.bigger = NaN
+        clearTimeout(this.timer)
+      }, 500)
     }
   },
   mounted() {
@@ -477,26 +502,57 @@ export default {
           height: 100%;
           cursor: pointer;
           &:hover {
-            animation: bigger 0.5s linear;
-            animation-fill-mode: forwards;
+            color: rgb(255, 0, 0);
           }
         }
+        .bigger-2 {
+          animation: bigger 0.4s linear;
+        }
+        // .bigger-1 {
+        //   animation: small 0.4s linear;
+        // }
+        // @keyframes small {
+        //    25% {
+        //     font-size: 100px;
+        //     color: rgba(255, 0, 0, 1);
+        //     opacity: 1;
+        //   }
+        //   50% {
+        //     font-size: 75px;
+        //     color: rgba(255, 0, 0.66);
+        //     opacity: 0.66;
+        //   }
+        //   75% {
+        //     font-size: 50px;
+        //     color: rgba(255, 0, 0, 0.33);
+        //     opacity: 0.33;
+        //   }
+        //   100% {
+        //     font-size: 24px;
+        //     color: #ccc;
+        //     opacity: 0;
+        //   }
+        // }
         @keyframes bigger {
           25% {
-            font-size: 32px;
+            font-size: 24px;
             color: rgba(255, 0, 0, 0.25);
+            opacity: 1;
           }
           50% {
-            font-size: 24px;
-            color: rgba(255, 0, 0);
+            font-size: 50px;
+            color: rgba(255, 0, 0.5);
+            opacity: 0.66;
           }
           75% {
-            font-size: 28px;
+            font-size: 75px;
             color: rgba(255, 0, 0, 0.75);
+            opacity: 0.33;
           }
           100% {
-            font-size: 24px;
+            font-size: 100px;
             color: rgb(255, 0, 0);
+            opacity: 0;
           }
         }
       }
