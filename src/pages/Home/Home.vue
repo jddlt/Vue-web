@@ -18,15 +18,15 @@
           </div>
           <div class="info-message flex-sc">
             <div class="message-item flex-cc">
-              <i class="iconfont fs15 c999">&#xe61e;</i>
-              <span class="fs15 c999 ml5">{{userInfo.cellect || 0}}</span>
+              <i class="iconfont fs15 c999 fwl" title='阅读数'>&#xe663;</i>
+              <span class="fs15 c999 ml5">{{userInfo.looks || 0}}</span>
             </div>
             <div class="message-item flex-cc">
-              <i class="iconfont fs14 c999">&#xe60c;</i>
-              <span class="fs15 c999 ml5 mt-1">{{0}}</span>
+              <i class="iconfont fs14 c999 fwl" title='获赞数'>&#xe60c;</i>
+              <span class="fs15 c999 ml5 mt-1">{{userInfo.like || 0}}</span>
             </div>
             <div class="message-item flex-cc">
-              <i class="iconfont fs15 c999">&#xe6b0;</i>
+              <i class="iconfont fs14 c999 fwl" title='发帖数'>&#xe6b0;</i>
               <span class="fs15 c999 ml5">{{userInfo.artical_num || 0}}</span>
             </div>
           </div>
@@ -51,7 +51,7 @@
                 </span>
               </div>
             </div>
-            <i :class="'list-like iconfont fs22 cccc flex-cc' + (((bigger == index) && (item.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (item.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(item._id, index, item.likes)">&#xe61d;</i>
+            <i :class="'list-like iconfont fs22 cccc flex-cc usn' + (((bigger == index) && (item.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (item.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(item._id, index, item.likes)">&#xe61d;</i>
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
             <p class="list-title fs16 c333 fwb cp es1">{{item.title}}</p>
@@ -60,11 +60,15 @@
           <div class="list-foot flex-sc">
             <div class="foot-left flex-c">
               <span class="list-message flex-cc">
-                <i class="iconfont fs15 c999">&#xe60c;</i>
+                <i class="iconfont fs15 c999 fwl" title='点赞数'>&#xe60c;</i>
                 <span class="fs15 c999 ml2">{{item.collect || 0}}</span>
               </span>
               <span class="list-message flex-cc ml20">
-                <i class="iconfont fs15 c999">&#xe6a1;</i>
+                <i class="iconfont fs16 c999 fwl" title='浏览量'>&#xe663;</i>
+                <span class="fs15 c999 ml2">{{item.looks || 0}}</span>
+              </span>
+              <span class="list-message flex-cc ml20">
+                <i class="iconfont fs15 c999 fwl" title='转发'>&#xe6a1;</i>
                 <!-- <span class="fs15 c999">2546</span> -->
               </span>
             </div>
@@ -156,7 +160,7 @@
         </div>
       </div>
     </div>
-    <Page :current="1" :total="total" simple class="page flex-cc" @on-change='changeIndex'/>
+    <Page :current="1" :total="total" simple class="page flex-cc" @on-change='changeIndex' :page-size='5'/>
     <InfoDialog :isOpen='isOpen' :userInfo='showUserInfo' :time='time'></InfoDialog>
     <!-- <Footer></Footer> -->
   </div>
@@ -193,7 +197,8 @@ export default {
       bigger: NaN,
       timer: 0,
       pageIndex: 1,
-      times: 0
+      times: 0,
+      timeStart: null
     };
   },
   computed: {
@@ -302,10 +307,21 @@ export default {
     closeInfo() {
       this.isOpen = false
     },
-
+    getUserInfo() {
+      this.$get("/userInfo", {}).then(msg => {
+        this.$store.dispatch("setUserInfo", msg.data);
+      });
+    },
     iLike(id, index, likes) {
-      this.times ++;
-      if()
+      this.times++;
+      this.timeStart || (this.timeStart = new Date().getTime())
+      if(this.times == 4) {
+        if((Date.now() - this.timeStart) < 2500) {
+          this.$Message.error('你点这么快干嘛??')
+        }
+        this.times = 0
+        this.timeStart = null
+      }
       clearTimeout(this.timer)
       this.bigger = index;
       this.$get('/artical/like', {
@@ -313,7 +329,9 @@ export default {
         is_like: !likes.includes(this.userInfo._id)
       }).then(res => {
         if(res.code == 200) {
-          this.getArticalList(this.pageIndex);
+          this.getArticalList(this.pageIndex)
+          this.getUserInfo()
+          this.getArticalSort()
           this.$Message.info(res.msg)
         }
       })
@@ -436,7 +454,7 @@ export default {
           &:hover > span {
             // color: #4158d0 !important;
             .c;
-            font-weight: bold;
+            // font-weight: bold;
           }
         }
       }
@@ -590,10 +608,10 @@ export default {
           height: 100%;
           cursor: pointer;
           &:hover > i,
-          &:hover > span {
+          &:hover > span:last-of-type {
             // color: #4158d0 !important;
             .c;
-            font-weight: bold;
+            // font-weight: bold;
             // font-size: 16px;
           }
         }
@@ -799,7 +817,7 @@ i {
 //   line-height: 50px;
 // }
 .c {
-  color: #2d8cf0;
+  color: #2d8cf0 !important;
 }
 .bgc {
   background-color: #2d8cf0;

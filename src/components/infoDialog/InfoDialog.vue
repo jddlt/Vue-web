@@ -48,6 +48,11 @@ export default {
         },
         time: Number
     },
+    watch: {
+      userInfo(o) {
+        console.log(o)
+      }
+    },
     methods: {
         close() {
             this.$parent.closeInfo && this.$parent.closeInfo()

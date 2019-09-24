@@ -11,11 +11,11 @@
                 <span class="lh100">
                   <i class="iconfont fs11">&#xe629;</i>
                   <span class="c999 fs13 lh100 fwl">{{toTime(articalInfo.create_time)}}</span>
-                  <span class="c999 fs13 lh100 fwl">1人阅读</span>
+                  <span class="c999 fs13 lh100 fwl ml5">{{articalInfo.looks || 0}}人阅读</span>
                 </span>
               </div>
             </div>
-            <i class="list-like iconfont fs22 cccc flex-cc">&#xe61d;</i>
+            <i :class="'list-like iconfont fs22 cccc flex-cc usn' + ((bigger && (articalInfo.likes && articalInfo.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (articalInfo.likes && articalInfo.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(articalInfo._id, articalInfo.likes)">&#xe61d;</i>
           </div>
           <div class="artical-title fs-big fwb tc">
             {{articalInfo.title}}
@@ -80,7 +80,11 @@ export default {
       talkList: [],
       id: '',
       isOpen: false,
-      showUserInfo: {}
+      showUserInfo: {},
+      times: 0,
+      timeStart: null,
+      bigger: NaN,
+      timer: 0
     };
   },
   mounted() {
@@ -96,8 +100,6 @@ export default {
       }).then(res => {
         if(res.code == 200) {
             this.articalInfo = res.data;
-            console.log('this.articalInfo', this.articalInfo);
-            
             this.id = this.$route.query.id;
             this.talkList = (res.data.answer && res.data.answer.reverse()) || []
           }
@@ -110,7 +112,34 @@ export default {
 
       closeInfo() {
         this.isOpen = false
+      },
+
+      iLike(id, likes) {
+      this.times++
+      this.timeStart || (this.timeStart = new Date().getTime());
+      if(this.times == 4) {
+        if((Date.now() - this.timeStart) < 2500) {
+          this.$Message.error('你点这么快干嘛??')
+        }
+        this.times = 0
+        this.timeStart = null
       }
+      clearTimeout(this.timer)
+      this.bigger = true;
+      this.$get('/artical/like', {
+        id,
+        is_like: !likes.includes(this.userInfo._id)
+      }).then(res => {
+        if(res.code == 200) {
+          this.getArticalDetail()
+          this.$Message.info(res.msg)
+        }
+      })
+      this.timer = setTimeout(() => {
+        this.bigger = false
+        clearTimeout(this.timer)
+      }, 500)
+    }
   },
   beforeDestroy() {}
 };
@@ -176,26 +205,59 @@ export default {
           height: 100%;
           cursor: pointer;
           &:hover {
-            animation: bigger 0.5s linear;
-            animation-fill-mode: forwards;
+            // animation: bigger 0.5s linear;
+            // animation-fill-mode: forwards;
+            color: red;
           }
         }
+        .bigger-2 {
+          animation: bigger 0.4s linear;
+        }
+        // .bigger-1 {
+        //   animation: small 0.4s linear;
+        // }
+        // @keyframes small {
+        //    25% {
+        //     font-size: 100px;
+        //     color: rgba(255, 0, 0, 1);
+        //     opacity: 1;
+        //   }
+        //   50% {
+        //     font-size: 75px;
+        //     color: rgba(255, 0, 0.66);
+        //     opacity: 0.66;
+        //   }
+        //   75% {
+        //     font-size: 50px;
+        //     color: rgba(255, 0, 0, 0.33);
+        //     opacity: 0.33;
+        //   }
+        //   100% {
+        //     font-size: 24px;
+        //     color: #ccc;
+        //     opacity: 0;
+        //   }
+        // }
         @keyframes bigger {
           25% {
-            font-size: 32px;
+            font-size: 24px;
             color: rgba(255, 0, 0, 0.25);
+            opacity: 1;
           }
           50% {
-            font-size: 24px;
-            color: rgba(255, 0, 0);
+            font-size: 50px;
+            color: rgba(255, 0, 0.5);
+            opacity: 0.66;
           }
           75% {
-            font-size: 28px;
+            font-size: 75px;
             color: rgba(255, 0, 0, 0.75);
+            opacity: 0.33;
           }
           100% {
-            font-size: 24px;
+            font-size: 100px;
             color: rgb(255, 0, 0);
+            opacity: 0;
           }
         }
       }
