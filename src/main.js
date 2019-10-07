@@ -12,8 +12,15 @@ import { crop } from '@/util/util'
 
 
 Vue.config.productionTip = false
-
 Vue.use(iView)
+
+// router.beforeEach((to, from, next) => {
+//   get('http://data.zz.baidu.com/urls', {
+//     site: 'www.mrpzx.cn',
+//     token: 'yBBPwJUwOcidY69G'
+//   })
+//     next()
+// })
 
 Vue.prototype.$get = get
 Vue.prototype.$post = post

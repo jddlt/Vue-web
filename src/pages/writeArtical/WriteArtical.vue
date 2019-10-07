@@ -125,7 +125,24 @@ export default {
   destroyed() {
     console.log('awsl');
     window.removeEventListener('resize', this.handleResize, false)
-  }
+  },
+    beforeRouteLeave(to,from,next){
+      console.log('this', this);
+      
+      if(this.artical.title || this.artical.content) {
+        this.$Modal.confirm({
+          title: '提醒',
+          content: '您有编译内容未发布, 确定退出吗, 目前退出无法自动保存!',
+          okText: '确定退出',
+          cancelText: '返回',
+          onOk() {
+            next()
+          }
+        })
+      } else {
+        next()
+      }
+    }
 };
 </script> 
 

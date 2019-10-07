@@ -1,5 +1,5 @@
 <template>
-  <div class="footer c000 fs15 bs">
+  <div class="footer c000 fs15 bs" ref='box'>
     ©2019 展讯版权所有
     <a
       href="http://sh.beian.miit.gov.cn"
@@ -16,11 +16,14 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    
+  },
+  mounted() {
+  },
   beforeDestroy() {}
 };
 </script>
-
 
 <style scoped lang='less'>
 .footer {

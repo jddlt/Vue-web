@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view class="router"/>
+    <!-- <transition name='fade'> -->
+      <router-view class="router"/>
+    <!-- </transition> -->
     <Footer v-if="isShow"></Footer>
     <BackTop :bottom="75" class="op"></BackTop>
   </div>
@@ -44,5 +46,13 @@ export default {
 }
 .op{
   opacity: 0.3;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all .2s;
+
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  /* opacity: 0.3; */
+  transform: rotateY(180deg)
 }
 </style>

@@ -7,8 +7,8 @@ import 'iview/dist/styles/iview.css';
 
 
 const baseURL = (process.env.NODE_ENV === 'development'
-                  ? 'http://127.0.0.1:3000/'
-                  : 'https://www.mrpzx.cn/')
+                  ? 'http://127.0.0.1:3000/zx/'
+                  : 'https://www.mrpzx.cn/zx/')
 
 // const unLoginUrl = ['/login', '/addUser', '/userInfo']
 

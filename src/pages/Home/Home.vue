@@ -39,7 +39,7 @@
       </div>
       <div class="mid">
         <div class="head bs">今日话题</div>
-        <div class="list bs" v-for="(item, index) in articalList" :key="item._id">
+        <div class="list bs" v-for="(item, index) in (articalList ? articalList : 5)" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc" @click="showInfo(item.author)">
               <img :src="$crop(item.author.avatar, 35, 35, time)" alt class="list-img cp" />
@@ -55,7 +55,7 @@
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
             <p class="list-title fs16 c333 fwb cp es1">{{item.title}}</p>
-            <p class="list-content fs15 c333 fwl es3">{{item.content}}</p>
+            <p class="list-content fs15 c333 fwl es3">{{item.content | compile}}</p>
           </div>
           <div class="list-foot flex-sc">
             <div class="foot-left flex-c">
@@ -170,6 +170,7 @@
 import Cookie from "js-cookie";
 import { mapGetters } from "vuex";
 import { timeAgo } from "./../../util/formatTime";
+import { showdown, VueShowdown } from 'vue-showdown'
 import upload from "@/components/upload/Upload";
 import HeadBar from "@/components/headBar/HeadBar";
 import Footer from "@/components/footer/Footer";
@@ -204,7 +205,15 @@ export default {
   computed: {
     ...mapGetters(["userInfo"])
   },
-
+  filters: {
+    compile(text) {
+      let converter = new showdown.Converter(),
+      html = converter.makeHtml(text);
+      html = html.replace(/<h[1-6].*\/h[1-6]>/g, '');
+      html = html.trim().replace(/<\/?[^>]*>/g, '');
+      return html
+    }
+  },
   methods: {
     sendArtical() {
       const { title, content } = this.artical;

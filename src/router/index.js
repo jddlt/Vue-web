@@ -15,6 +15,7 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -55,5 +56,5 @@ export default new Router({
     }
     // 否则直接回到顶部
     return {x: 0, y: 0}
-   }
+   },
 })

@@ -106,7 +106,7 @@ export default {
         })
       },
       showInfo(author) {
-        this.isOpen = true,
+        this.isOpen = true
         this.showUserInfo = author
       },
 
@@ -295,7 +295,8 @@ export default {
     min-width: 200px;
     max-width: 980px;
     margin: 0 auto;
-    padding: 45px;
+    padding: 20px;
+    /* padding-right: 25px; */
 }
 *{
   user-select: text;
