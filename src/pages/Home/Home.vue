@@ -14,7 +14,7 @@
           </div>
           <div class="info-body flex-c-sc">
             <div class="info-name c000 fwb fs20">{{userInfo.name || '未登录'}}</div>
-            <div class="info-mark c999 fwl fs16">{{userInfo.name ? (userInfo.tips ? userInfo.tips : '该用户暂未填写签名') : '你还没登陆呢'}}</div>
+            <div class="info-mark c666 fwl fs12">{{userInfo.name ? (userInfo.tips ? userInfo.tips : '该用户暂未填写签名') : '你还没登陆呢'}}</div>
           </div>
           <div class="info-message flex-sc">
             <div class="message-item flex-cc">

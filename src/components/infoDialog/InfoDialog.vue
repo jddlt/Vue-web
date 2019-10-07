@@ -15,7 +15,7 @@
                 <div class="fs16 tc">
                     <p class="mt5 mb5 fs15">{{userInfo.emil || '--'}}</p>
                     <p class="fs15 mb10 mt10">{{userInfo.sex || '人妖?'}}<span class="item-class fs15">{{userInfo.label || '萌萌哒'}}</span></p>
-                    <p class="c999 fs14 mt15">{{userInfo.tips || '该用户暂未填写签名'}}</p>
+                    <p class="c666 fs12 mt15">{{userInfo.tips || '该用户暂未填写签名'}}</p>
                 </div>
             </div>
             <!-- <div class="info-mark c999 fwl fs16">{{userInfo.name ? (userInfo.tips ? userInfo.tips : '该用户暂未填写签名') : '你还没登陆呢'}}</div> -->
