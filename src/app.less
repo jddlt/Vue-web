@@ -1,12 +1,13 @@
 @font-face {
   font-family: 'iconfont';  /* project id 904593 */
-  src: url('//at.alicdn.com/t/font_904593_vc7il1ece98.eot');
-  src: url('//at.alicdn.com/t/font_904593_vc7il1ece98.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_904593_vc7il1ece98.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_904593_vc7il1ece98.woff') format('woff'),
-  url('//at.alicdn.com/t/font_904593_vc7il1ece98.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_904593_vc7il1ece98.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.eot');
+  src: url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.woff') format('woff'),
+  url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_904593_gm1eb7wfezb.svg#iconfont') format('svg');
 }
+
 
 .iconfont{
   font-family:"iconfont" !important;
@@ -19,27 +20,65 @@
 
 /*全站滚动条*/
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 6px;
+  width: 14px;
+  height: 14px;
 }
-
-::-webkit-scrollbar-track-piece {
-  background-color: rgba(200, 80, 192, 0.2);
-  // opacity: 0.1;
+ 
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 5px solid transparent;
 }
-
-::-webkit-scrollbar-thumb:vertical {
-  height: 5px;
-  background-color: #4158D0;
+ 
+::-webkit-scrollbar-track {
+  box-shadow: 1px 1px 5px rgba(0,0,0,.2) inset;
 }
-
-::-webkit-scrollbar-thumb:horizontal {
-  width: 0px;
-  background-color: #CCCCCC;
+ 
+::-webkit-scrollbar-thumb {
+  min-height: 20px;
+  background-clip: content-box;
+  box-shadow: 0 0 0 5px rgba(0,0,0,.2) inset;
+}
+ 
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+@media screen and (max-width: 375px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+    }
+    
+    ::-webkit-scrollbar-track {
+    background-color: none;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+    background-color: none;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+    background-color: none;
+    }
+    
+    ::-webkit-scrollbar-thumb:active {
+    background-color: none;
+    }
 }
 
 /** margin  **/
 
+.ml1{
+  margin-left: 1px;
+}
+.ml2{
+  margin-left: 2px;
+}
+.ml3{
+  margin-left: 3px;
+}
+.ml4{
+  margin-left: 4px;
+}
 .ml5{
   margin-left: 5px;
 }
@@ -53,6 +92,30 @@
   margin-left: 30px;
 }
 
+.mt-1{
+  margin-top: -1px;
+}
+.mt-2{
+  margin-top: -2px;
+}
+.mt-3{
+  margin-top: -3px;
+}
+.mt-4{
+  margin-top: -4px;
+}
+.mt1{
+  margin-top: 1px;
+}
+.mt2{
+  margin-top: 2px;
+}
+.mt3{
+  margin-top: 3px;
+}
+.mt4{
+  margin-top: 4px;
+}
 .mt5{
   margin-top: 5px;
 }
@@ -66,6 +129,18 @@
   margin-top: 30px;
 }
 
+.mr1{
+  margin-right: 1px;
+}
+.mr2{
+  margin-right: 2px;
+}
+.mr3{
+  margin-right: 3px;
+}
+.mr4{
+  margin-right: 4px;
+}
 .mr5{
   margin-right: 5px;
 }
@@ -79,6 +154,18 @@
   margin-right: 30px;
 }
 
+.mb1{
+  margin-bottom: 1px;
+}
+.mb2{
+  margin-bottom: 2px;
+}
+.mb3{
+  margin-bottom: 3px;
+}
+.mb4{
+  margin-bottom: 4px;
+}
 .mb5{
   margin-bottom: 5px;
 }
@@ -184,22 +271,22 @@
 /**  color  **/
 
 .cfff{
-  color: #fff;
+  color: #fff !important;
 }
 .c333{
-  color: #333;
+  color: #333 !important;
 }
 .c666{
-  color: #666;
+  color: #666 !important;
 }
 .c999{
-  color: #999;
+  color: #999 !important;
 }
 .cccc{
-  color: #ccc;
+  color: #ccc !important;
 }
 .c000{
-  color: #000;
+  color: #000 !important;
 }
 .red{
   color: red !important;
@@ -213,7 +300,12 @@
 .yellow{
   color: yellow !important;
 }
-
+.c{
+  color: #2d8cf0 !important;
+}
+.bgc{
+  background-color: #2d8cf0 !important;
+}
 /**  font-weight **/
 
 .fwl{
@@ -227,7 +319,21 @@
 }
 
 /**  flex  **/
-
+.flex{
+  display: flex !important;
+}
+.flex-1{
+  flex: 1
+}
+.flex-2{
+  flex: 2
+}
+.flex-3{
+  flex: 3
+}
+.flex-4{
+  flex: 4
+}
 .flex-cc{
   display: flex;
   justify-content: center;
@@ -237,6 +343,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
+.flex-c{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.flex-c-c{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 }
 .flex-sc{
@@ -302,6 +419,11 @@
   cursor: pointer;
 }
 
+/**  cursor: pointer  **/
+.bb{
+  border-bottom: 1px solid #eee;
+}
+
 /**  text-align  **/
 .tr{
   text-align: right;
@@ -314,6 +436,11 @@
 }
 
 /**  float  **/
+.es1{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .es2{
   overflow : hidden;
   text-overflow: ellipsis;
@@ -328,3 +455,37 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+.usn{
+  user-select: none !important;
+}
+
+.bs{
+  box-shadow: 0 0 3px #ccc !important;
+}
+
+.bss{
+  box-shadow: 0 0 3px 2px #ccc !important;
+}
+
+/** 去除滚动条 **/
+/**
+::-webkit-scrollbar {
+  width: 0px;
+  }
+  
+::-webkit-scrollbar-track {
+background-color: none;
+}
+
+::-webkit-scrollbar-thumb {
+background-color: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background-color: none;
+}
+
+::-webkit-scrollbar-thumb:active {
+background-color: none;
+}
+**/

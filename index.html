@@ -3,10 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>vue-template</title>
+    <meta name="keywords" content="展讯,展讯论坛,聊天,软件,下载,技术,web前端,论坛,社区">
+    <meta name="description" content="展讯社区(和展讯没关系),是一个聊天互动,资源共享,软件下载,技术分享的地方,玩的开心 \<(*￣▽￣*)/">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="baidu-site-verification" content="G26Y4hLxNN" />
+    <title>展讯 - 你想上的社区</title>
     <style>
       div, span, img, input, button{
         user-select: none;
+      }
+      li{
+        list-style: none;
       }
       html, body{
         margin: 0;
@@ -15,9 +22,24 @@
         height: 100%;
       }
     </style>
+    <link rel="shortcut icon" href="./static/favicon.ico" >
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      (function(){
+          var bp = document.createElement('script');
+          var curProtocol = window.location.protocol.split(':')[0];
+          if (curProtocol === 'https') {
+              bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+          }
+          else {
+              bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+          }
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(bp, s);
+      })();
+  </script>
   </body>
 </html>

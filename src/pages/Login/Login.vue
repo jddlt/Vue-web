@@ -1,9 +1,9 @@
 <template>
   <div class="login">
-    <upload />
+    <!-- <upload /> -->
     <div class="container">
-      <div class="item">
-        <img src="./../../assets/img/login_usr.png" alt="user">
+      <div class="item my-img">
+        <img src="./../../../static/img/login_usr.png" alt="user">
       </div> 
       <div class="item">  
         <h3 class="title">账号{{way}}</h3>
@@ -31,11 +31,9 @@
 </template>
 
 <script> 
-import upload from '@/components/upload/Upload'
+// import upload from '@/components/upload/Upload'
 export default {
-  components: {
-    upload
-  }, 
+  components: { }, 
   data() {
     return {
       way: '登陆',
@@ -76,7 +74,7 @@ export default {
           if(msg.code == 200){
             this.$Message.success({  content: '登陆成功' })
             setTimeout(() => {
-              this.$router.push('/')
+              this.$router.go(-1)
             }, 1500)
           }
         })
@@ -144,10 +142,11 @@ h3{
   justify-content: center;
   align-items: center;
   .container{
-    width: 50vw;
-    min-width: 600px;
-    height: 70vh;
-    min-height: 400px;
+    width: 92%;
+    max-width: 768px;
+    min-width: 325px;
+    height: 505px;
+    // min-height: 400px;
     background-color: #FFFFFF;
     border-radius: 15px;
     display: flex;
@@ -210,7 +209,14 @@ h3{
     }
   }
 }
-
+input:-internal-autofill-selected /deep/ {
+  background-color: #eee !important;
+}
+@media screen and (max-width: 870px) {
+  .my-img{
+    display: none !important;
+  }
+}
 
 
 </style>

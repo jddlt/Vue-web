@@ -1,143 +1,194 @@
 <template>
-  <div class="upload">
-    <div class="demo-upload-list"></div>
-    <Upload
-      ref="upload"
-      :show-upload-list="false"
-      :on-success="handleSuccess"
-      :format="['jpg','jpeg','png']"
-      :max-size="2048"
-      :on-format-error="handleFormatError"
-      :on-exceeded-size="handleMaxSize"
-      :before-upload="handleBeforeUpload"
-      type="select"
-      action="http://127.0.0.1:3000/upload"
-      style="display: inline-block;width:58px;"
-    >
-      <div class="camara">
-        <Icon type="ios-camera" size="20"></Icon>
-      </div>
-    </Upload>
-    <Modal title="View Image" v-model="visible">
-      <img
-        :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'"
-        v-if="visible"
-        style="width: 100%"
-      />
-    </Modal>
+  <div>
+    <div class="box flex-cc my-bs" :style="style">
+      <img :src="$crop(userInfo.avatar, 100, 100, time)" alt="" ref="img" accept="image/*" class="img" v-if="userInfo.avatar">
+      <Icon type="ios-contact" class="cp no-avatar" v-else/>
+      <div class="tips flex-cc fs15 cfff fwl">{{userInfo.avatar ? '更换头像' : '上传头像'}}</div>
+      <input type="file" @input='fileChange($event)' class="input cp" title="">
+    </div>
   </div>
 </template>
 
 <script>
+import qiniu from 'qiniu'
+import { ak, sk, bucket, host } from './../../../qiniu.config'
+// import { mapGetters } from "vuex";
+import { encode } from '@/util/util'
 export default {
   data() {
     return {
-      defaultList: [],
-      imgName: "",
-      visible: false,
-      uploadList: []
-    };
-  },
-  methods: {
-    handleView(name) {
-      this.imgName = name;
-      this.visible = true;
-    },
-    handleRemove(file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess(res, file, list) {
-      console.log("res", res);
-      console.log("file", file);
-      console.log("list", list);
-    },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: "The file format is incorrect",
-        desc:
-          "File format of " +
-          file.name +
-          " is incorrect, please select jpg or png."
-      });
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "Exceeding file size limit",
-        desc: "File  " + file.name + " is too large, no more than 2M."
-      });
-    },
-    handleBeforeUpload() {
-      const check = this.uploadList.length < 5;
-      if (!check) {
-        this.$Notice.warning({
-          title: "Up to five pictures can be uploaded."
-        });
-      }
-      return check;
+      style: {
+        'border-radius': '50%'
+      },
+      token: '',
+      time: new Date().getTime()
     }
   },
+  props: {
+    flash: true,
+    userInfo: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  computed: {
+    // ...mapGetters({userInfo: 'userInfo'})
+  },
+  watch: {
+    
+  },
   mounted() {
-    this.uploadList = this.$refs.upload.fileList;
+    const mac = new qiniu.auth.digest.Mac(ak, sk);
+    const options = {
+      scope: bucket,
+    };
+    const putPolicy = new qiniu.rs.PutPolicy(options);
+    this.token = putPolicy.uploadToken(mac);
+  },
+  methods: {
+    fileChange(e) {
+      const _this = this
+      const file = e.target.files[0]
+      if(!this.userInfo.emil) {
+        this.$Message.error('未登录')
+        setTimeout(() => {
+          this.$router.push('/login')
+        }, 1200)
+        return
+      }
+      if(!file) {
+        this.$Message.info('已取消')
+        return
+      }
+      this.$Modal.confirm({
+        title: '警告',
+        content: '请注意,该操作会立即修改头像,不受保存设置! 是否继续?',
+        okText: '确定',
+        cancelText: '取消',
+        onCancel: () => {
+          this.$Message.info('已取消')
+          e.target.type = 'text'
+          e.target.type = 'file'
+        },
+        onOk: () => {
+          if(!/\.(png|jpe?g|gif)$/g.test(file.name)) {
+            this.$Message.error('请上传图片')
+          } else if(file.size > 2000000) {
+            this.$Message.error('图片大于2M')
+          } else {
+            const Reader = new FileReader()
+            Reader.readAsDataURL(file);
+            Reader.addEventListener('load', function() {
+              _this.putb64(this.result).then(res => {
+                _this.$post('/upload', {
+                  key: res
+                }).then(res => {
+                  // _this.getUserInfo()
+                  _this.time = new Date().getTime()
+                  _this.$Message.success('上传成功')
+                  e.target.type = 'text'  // 牛逼
+                  e.target.type = 'file'
+                })
+              })
+            })
+          }
+        }
+      })
+    },
+    putb64(result){
+      console.log('this.userInfo._id', this.userInfo._id);
+      return new Promise((resolve, reject) => {
+        const pic = result.replace(/data:image\/.*;base64,/,'')
+        const key = encode(this.userInfo._id)
+        const url = `https://upload.qiniup.com/putb64/-1/key/${key}/`; //非华东空间需要根据注意事项 1 修改上传域名
+        const xhr = new XMLHttpRequest();
+        const _this = this
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState==4){
+            resolve(JSON.parse(xhr.responseText)['key'])
+          }
+        }
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+        xhr.setRequestHeader("Authorization", 'UpToken ' + _this.token);
+        xhr.send(pic);
+      })
+    },
+    getUserInfo() {
+      this.$get("/userInfo", {}).then(msg => {
+        // this.userInfo = msg.data || {};
+        this.$store.dispatch("setUserInfo", msg.data);
+      });
+    }
   }
-};
+}
 </script>
 
-
 <style scoped lang='less'>
-.upload {
-  width: 100vw;
-  height: 100vh;
-  background-color: #ccc;
-}
-.demo-upload-list {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-right: 4px;
-}
-.camara{
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-right: 4px;
-}
-.demo-upload-list img {
-  width: 100%;
-  height: 100%;
-}
-.demo-upload-list-cover {
-  display: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.demo-upload-list:hover .demo-upload-list-cover {
-  display: block;
-}
-.demo-upload-list-cover i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0 2px;
-}
-</style>
+  .box{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    // border: 1px solid #ccc;
+    background-color: #fff;
+    // border: 12px solid #fff;
+    overflow: hidden;
+    &:hover .tips{
+      z-index: 1;
+      cursor: pointer;
+    }
+    .no-avatar{
+      position: absolute;
+      // width: 100px;
+      // height: 100px;
+      // font-size: 100%;
+      .fs95
+    }
+    .input{
+      width: 100px;
+      height: 100px;
+      border: none;
+      outline: none;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+    }
+    .img{
+      width: 100px;
+      height: 100px;
+      border: 1px solid #ccc;
+    }
+    .tips{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(0,0,0,0.3);
+      z-index: -1
+    }
+  }
+  .my-bs{
+    box-shadow: 0 0 5px 3px #ccc;
+  }
+  .fs95{
+    font-size: 95px;
+  }
+  input{
+    cursor: pointer !important;
+  }
+  // /deep/.ivu-modal-confirm-head{
+  //   padding: 0 !important;
+  //   text-align: center !important;
+  // }
+  // /deep/.ivu-modal-body>.ivu-modal-confirm>.ivu-modal-confirm-body{
+  //   padding-left: 0 !important;
+  // }
+  // /deep/.ivu-modal-body>.ivu-modal-confirm>.ivu-modal-confirm-footer{ 
+  //   text-align: center !important;
+  // }
+</style>>

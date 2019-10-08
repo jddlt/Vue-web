@@ -6,8 +6,10 @@ import { Message } from 'iview'
 import 'iview/dist/styles/iview.css';
 
 
+const baseURL = (process.env.NODE_ENV === 'development'
+                  ? 'http://127.0.0.1:3000/zx/'
+                  : 'https://www.mrpzx.cn/zx/')
 
-const baseURL = 'http://127.0.0.1:3000'
 // const unLoginUrl = ['/login', '/addUser', '/userInfo']
 
 // 设置默认的axios的设置
@@ -49,7 +51,7 @@ axios.interceptors.response.use((response) => {
     return Promise.resolve(response);
   }
 }, (error) => {
-  Message.error(error.response.data.data.msg)
+  Message.error(error.response.data.msg)
   return Promise.reject(error);
 });
 

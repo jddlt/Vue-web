@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/pages/Login/Login'
 import Home from '@/pages/Home/Home'
-import Upload from '@/components/upload/Upload'
+import Artical from '@/pages/Artical/Artical'
+import UserInfo from '@/pages/UserInfo/UserInfo'
+import WriteArtical from '@/pages/writeArtical/WriteArtical'
+// import Upload from '@/components/upload/Upload'
  
 Vue.use(Router)
 
@@ -12,7 +15,9 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -24,10 +29,32 @@ export default new Router({
       name: 'Login',
       component: Login
     },
-    {
-      path: '/upload',
-      name: 'Upload',
-      component: Upload
+    { 
+      path: '/artical', 
+      name: 'Artical',
+      component: Artical
     },
-  ]
+    { 
+      path: '/userInfo',
+      name: 'UserInfo',  
+      component: UserInfo
+    },
+    { 
+      path: '/writeArtical', 
+      name: 'WriteArtical',
+      component: WriteArtical
+    },
+    { 
+      path: '/*', 
+      redirect: '/'
+    }
+  ],
+  scrollBehavior: (to, from, savePosition) => {
+    // 如果savePosition存在，则直接滚动到相应位置
+    if (savePosition) {
+      return savePosition 
+    }
+    // 否则直接回到顶部
+    return {x: 0, y: 0}
+   },
 })
