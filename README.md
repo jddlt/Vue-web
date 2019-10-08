@@ -1,21 +1,8 @@
-# vue-template
+# 展讯社区
 
-> A Vue.js project
+一个丑不垃圾的论坛社区类网站,支持登陆注册,发帖看贴,评论,个人中心,及markdown语法
 
-## Build Setup
+预览  [展讯社区](https://www.mrpzx.cn)
 
-``` bash
-# install dependencies
-npm install
+**该项目为前端代码,与之配对的后端代码在这里:**  [server](https://github.com/jddlt/Vue-Server)
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
