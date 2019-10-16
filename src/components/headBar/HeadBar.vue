@@ -78,7 +78,12 @@ export default {
     },
     select(name) {
       if (name == "1") {
-        this.$router.push("/");
+        if(this.$route.name === 'Home') {
+          this.$parent.getArticalList()
+          document.documentElement.scrollTop = 0
+        } else {
+          this.$router.push("/");
+        }
       } else if (name == "2-1") {
         // this.$Message.info({
         //   content: "个人中心在哪里呢?"

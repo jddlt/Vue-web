@@ -32,12 +32,21 @@
           </div>
           <div class="info-foot"></div>
         </div>
-        <div class="block flex-cc bs">
-          <img src="./../../../static/img/gif_head.jpg" alt="gif_head" />
-          <img src="./../../../static/img/gif.gif" alt="gif" />
+        <div class="block bs">
+          <!-- <img src="./../../../static/img/gif_head.jpg" alt="gif_head" />
+          <img src="./../../../static/img/gif.gif" alt="gif" /> -->
+          <div class="category">
+            <div class="type-title flex-cc">
+              <i class="iconfont fs16 mr5">&#xe621;</i>
+              分类
+            </div>
+            <div class="flex-c-cc mt10">
+              <a v-for='type in typeList' :key='type' class="flex-r-c aa">{{type.name}} ({{type.count}})</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="mid">
+      <div class="mid mb20">
         <div class="head bs">今日话题</div>
         <div class="list bs" v-for="(item, index) in (articalList ? articalList : 5)" :key="item._id">
           <div class="list-head flex-sc">
@@ -54,8 +63,8 @@
             <i :class="'list-like iconfont fs22 cccc flex-cc usn' + (((bigger == index) && (item.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (item.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(item._id, index, item.likes)">&#xe61d;</i>
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
-            <p class="list-title fs16 c333 fwb cp es1">{{item.title}}</p>
-            <p class="list-content fs15 c333 fwl es3">{{item.content | compile}}</p>
+            <p class="list-title fs16 c000 fwb cp es1">{{item.title}}</p>
+            <p class="list-content fs13 c666 fwl es2">{{item.content | compile}}</p>
           </div>
           <div class="list-foot flex-sc">
             <div class="foot-left flex-c">
@@ -67,63 +76,19 @@
                 <i class="iconfont fs16 c999 fwl" title='浏览量'>&#xe663;</i>
                 <span class="fs15 c999 ml2">{{item.looks || 0}}</span>
               </span>
-              <span class="list-message flex-cc ml20">
-                <i class="iconfont fs15 c999 fwl" title='转发'>&#xe6a1;</i>
-                <!-- <span class="fs15 c999">2546</span> -->
+              <span class="list-message flex-cc ml10">
+                <i class="iconfont fs15 c999 ml20">&#xe61a;</i>
+                <span class="fs15 c999 mt-2">{{item.answer.length || 0}}</span>
               </span>
             </div>
-            <div class="list-message flex-cc" @click="openTalk(index)">
-              <i class="iconfont fs16 c999 fwb" v-if="item.open">&#xe661;</i>
-              <i class="iconfont fs15 c999 ml20">&#xe61a;</i>
-              <span class="fs15 c999 mt-2">{{item.answer.length || 0}}</span>
-              <!-- <img src="./../../../static/img/love.jpg" alt="love"> -->
-            </div>
-          </div>
-          <div
-            class="talk w100"
-            :style="{ height: item.open ? ((item.answer.length * 31 + 70) + 'px') : 0 }"
-          >
-            <div class="talk-input flex-sc">
-              <div class="flex-c w80">
-                <img
-                  :src="$crop(userInfo.avatar, 25, 25, time)"
-                  alt
-                  class="talk-img mr5 img-format"
-                  v-if="userInfo.avatar"
-                />
-                <Icon type="ios-contact" class="cp talk-img mr5 fs25" v-else />
-                <!-- <img :src="$crop(userInfo.avatar, 25, 25)" alt="" class="talk-img mr5 img-format" v-else/> -->
-                <div class="bbt-box">
-                  <input
-                    type="text"
-                    placeholder="想说点什么"
-                    class="real-input ml5"
-                    v-model.trim="replyContent"
-                  />
-                  <div class="bbt"></div>
-                </div>
-              </div>
-              <div class="talk-btn fs15" @click="reply(item._id, index)">评论</div>
-            </div>
-            <div v-for="(talk, index) in item.answer" :key="talk.time" class="flex-sc talk-list">
-              <div class="flex-c es1">
-                <img
-                  :src="$crop(talk.user_info.avatar, 22, 22, time)"
-                  alt
-                  class="talk-img mr5 img-format-min"
-                />
-                <span class="ml3 fs13 blue fwl mt4">{{talk.user_info.name}}:</span>
-                <span class="ml10 fs13 c666 fwl mt4">{{talk.content}}</span>
-              </div>
-              <div class="talk-time fs12 c999 mt-2">
-                {{timesAgo(talk.time)}}
-                <span
-                  class="ml10"
-                ># {{item.answer && (item.answer .length - index) }}楼</span>
-              </div>
+            <div class="list-message flex-cc c999 fwl mr5 read-more" @click="articalDetail(item._id)">
+              阅读更多 
+              <i class="iconfont c666 fs12 mt-1">&#xe60e;</i>
             </div>
           </div>
         </div>
+        <Spin size="large" v-if="loadStyle === 'loading'" class="w100 flex-cc mt20"></Spin>
+        <div v-if="loadStyle === 'loadOver'" class="w100 flex-cc mt20 c999">暂无更多</div>
       </div>
       <!-- </div>
       </div>-->
@@ -160,7 +125,7 @@
         </div>
       </div>
     </div>
-    <Page :current="1" :total="total" simple class="page flex-cc" @on-change='changeIndex' :page-size='5'/>
+    <!-- <Page :current="1" :total="total" simple class="page flex-cc" @on-change='changeIndex' :page-size='5'/> -->
     <InfoDialog :isOpen='isOpen' :userInfo='showUserInfo' :time='time'></InfoDialog>
     <!-- <Footer></Footer> -->
   </div>
@@ -185,6 +150,8 @@ export default {
   data() {
     return {
       articalList: [],
+      typeList: [],
+      // typeList: ['全部', 'Javascript', 'Vue', 'React', 'Webpack', 'Markdown', 'Jquery', 'Node', 'Python', 'Css', '闲聊'],
       artical: {
         title: "",
         content: ""
@@ -199,7 +166,9 @@ export default {
       timer: 0,
       pageIndex: 1,
       times: 0,
-      timeStart: null
+      timeStart: null,
+      loadStyle: 'loadMore',
+      scrollTimer: ''
     };
   },
   computed: {
@@ -239,15 +208,26 @@ export default {
     },
 
     getArticalList(index = 1) {
+      this.loadStyle = 'loading'
       this.$get("/artical", {
         pageIndex: index
       }).then(res => {
         if (res.code == 200) {
           this.articalList = res.data;
-          this.total = res.total
-          this.articalList.forEach((val, index) => {
-            val.answer = val.answer.reverse();
-          });
+          this.pageIndex = 1
+          this.loadStyle = 'loadMore'
+        }
+      });
+    },
+
+    getArticalTypeNum() {
+      this.$get("/artical/typeNum", {
+      }).then(res => {
+        if (res.code == 200) {
+          this.typeList = res.data
+          // this.articalList = res.data;
+          // this.pageIndex = 1
+          // this.loadStyle = 'loadMore'
         }
       });
     },
@@ -260,38 +240,6 @@ export default {
       });
     },
 
-    openTalk(index) {
-      const flag = this.articalList[index].open;
-      if (flag) {
-        this.articalList[index].open = false;
-      } else {
-        this.articalList.forEach((val, index) => {
-          val.open && (val.open = false);
-        });
-        this.$set(this.articalList[index], "open", true);
-      }
-    },
-
-    reply(_id, index) {
-      if (!this.replyContent) {
-        this.$Message.info("不能说空话哦");
-        return;
-      }
-      this.$get("/artical/reply", {
-        _id,
-        content: this.replyContent
-      }).then(res => {
-        if (res.code == 200) {
-          this.articalList[index].answer.unshift({
-            user_info: this.userInfo,
-            content: this.replyContent,
-            time: new Date().getTime()
-          });
-          this.$Message.success(res.msg);
-          this.replyContent = "";
-        }
-      });
-    },
 
     timesAgo(time) {
       return timeAgo(time);
@@ -348,19 +296,42 @@ export default {
         this.bigger = NaN
         clearTimeout(this.timer)
       }, 500)
+    },
+    scroll() {
+      window.onscroll = (e) => {
+        this.scrollTimer && clearTimeout(this.scrollTimer)
+        this.scrollTimer = setTimeout(() => {
+          console.log(1111);
+          const bottom = e.target.scrollingElement.scrollHeight-e.target.scrollingElement.scrollTop-e.target.scrollingElement.offsetHeight
+          // 距离底部0时加载一次
+          if (bottom <= 300 && this.loadStyle == 'loadMore') {
+            this.loadStyle = 'loading'
+            // 延时0.5s已获得优化空间
+            setTimeout(() => {
+              this.pageIndex++
+              this.$get("/artical", {
+                pageIndex: this.pageIndex
+              }).then(res => {
+                if (res.code == 200) {
+                  this.articalList = this.articalList.concat(res.data);
+                  if(res.data.length < 5) {
+                    this.loadStyle = 'loadOver'
+                  } else {
+                    this.loadStyle = 'loadMore'
+                  }
+                }
+              });
+            }, 500)
+          }
+       }, 20)
+      }
     }
   },
   mounted() {
     this.getArticalList();
     this.getArticalSort();
-    // this.$Message.info('MarkDown 语法即将支持')
-    // this.$Notice.config({
-    //   top: 60,
-    //   duration: 2
-    // });
-    // this.$Notice.info({
-    //   title: "不得已, 回复被删除啦 (ノへ￣、)"
-    // });
+    this.getArticalTypeNum();
+    this.scroll()
   },
   beforeDestroy() {}
 };
@@ -370,7 +341,6 @@ export default {
 <style scoped lang='less'>
 .home {
   width: 100%;
-  // height: 100%;
   padding-bottom: 1px;
 }
 .ivu-menu-primary {
@@ -382,39 +352,25 @@ export default {
   top: 0;
   .bgc;
 }
-// .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-item:hover,
-// .ivu-menu-primary.ivu-menu-horizontal .ivu-menu-submenu:hover {
-//   background: linear-gradient(to right top, #4158d0, #c850c0);
-// }
-
 .content {
-  // width: 1200px;
-  // height: 1400px;
-  // background-color: #ccc;
   width: 100%;
-  // height: 100%;
   margin: 30px auto;
   margin-bottom: 0;
-  // margin-bottom: 60px;
-  // color: #4158d0;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   .c;
   .left {
-    width: 276px;
+    width: 256px;
     height: 100%; 
     margin-right: 28px;
-    // background-color: #ccc;
     .info {
       width: 100%;
-      // height: 400px;
       background-color: #fff;
       .info-head {
         width: 100%;
         height: 100px;
         position: relative;
-        // background-color: #4158d0;
         .bgc;
         .info-img-box {
           width: 100px;
@@ -448,7 +404,6 @@ export default {
         box-sizing: border-box;
         border-bottom: 1px solid #ccc;
         margin-top: 50px;
-        // .info-name{}
       }
       .info-message {
         width: 100%;
@@ -461,16 +416,13 @@ export default {
           transition: all 0.3s;
           &:hover > i,
           &:hover > span {
-            // color: #4158d0 !important;
             .c;
-            // font-weight: bold;
           }
         }
       }
       .info-foot {
         width: 100%;
         height: 20px;
-        // background-color: #4158d0;
         .bgc;
       }
     }
@@ -480,12 +432,10 @@ export default {
     max-width: 600px;
     min-width: 325px;
     height: 100%;
-    // background-color: #ccc;
     .head {
       width: 100%;
       height: 70px;
       box-shadow: 0 0 2px #ccc;
-      // border-top: 6px solid #4158d0;
       .c;
       background-color: #fff;
       text-align: center;
@@ -502,6 +452,12 @@ export default {
       padding: 0 25px;
       box-sizing: border-box;
       margin-top: 20px;
+      transition: transform 0.2s;
+      &:hover{
+        transform: translate(0, -2px);
+        box-shadow: 
+          0 0 4px #999 !important;
+      }
       .list-head {
         width: 100%;
         height: 60px;
@@ -535,31 +491,6 @@ export default {
         .bigger-2 {
           animation: bigger 0.4s linear;
         }
-        // .bigger-1 {
-        //   animation: small 0.4s linear;
-        // }
-        // @keyframes small {
-        //    25% {
-        //     font-size: 100px;
-        //     color: rgba(255, 0, 0, 1);
-        //     opacity: 1;
-        //   }
-        //   50% {
-        //     font-size: 75px;
-        //     color: rgba(255, 0, 0.66);
-        //     opacity: 0.66;
-        //   }
-        //   75% {
-        //     font-size: 50px;
-        //     color: rgba(255, 0, 0, 0.33);
-        //     opacity: 0.33;
-        //   }
-        //   100% {
-        //     font-size: 24px;
-        //     color: #ccc;
-        //     opacity: 0;
-        //   }
-        // }
         @keyframes bigger {
           25% {
             font-size: 24px;
@@ -588,21 +519,17 @@ export default {
         height: auto;
         border-bottom: 1px solid #ccc;
         &:hover {
-          // color: #666;
           opacity: 0.85;
         }
         .list-title {
           width: 100%;
-          // height: 30px;
           line-height: 30px;
         }
         .list-content {
           width: 100%;
-          // height: 60px;
-          // padding: 8px 0 15px 0;
-          margin: 8px 0 15px 0;
+          margin: 0 0 7px 0;
           text-indent: 2em;
-          line-height: 150%;
+          line-height: 170%;
           transition: opacity 0.2s;
           cursor: pointer;
         }
@@ -615,14 +542,6 @@ export default {
         }
         .list-message {
           height: 100%;
-          cursor: pointer;
-          &:hover > i,
-          &:hover > span:last-of-type {
-            // color: #4158d0 !important;
-            .c;
-            // font-weight: bold;
-            // font-size: 16px;
-          }
         }
       }
       .talk {
@@ -750,9 +669,27 @@ li{
 i {
   margin-right: 3px;
 }
+.category{
+  padding: 25px 0;
+  color: #333;
+  font-weight: lighter;
+  font-size: 16px;
+  .type-title{
+    padding: 0 0 10px 0;
+    border-bottom: 1px dashed #2d8cf0;
+    font-size: 17;
+    margin-bottom: 5px;
+    .c
+  }
+  .aa{
+    &:hover{
+      text-decoration: underline !important;
+    }
+  }
+}
 .block {
   width: 100%;
-  height: 300px;
+  // height: 300px;
   margin-top: 20px;
   background-color: #fff;
   position: relative;
@@ -772,7 +709,6 @@ i {
   .sort-head {
     width: 100%;
     height: 50px;
-    // background-color: #4158d0;
     .bgc;
   }
   .sort-body {
@@ -788,11 +724,8 @@ i {
         margin-left: 12px;
       }
       .sort-name {
-        // margin-left: 2em;
-        // text-indent: -2em;
         &:hover {
           text-decoration: underline;
-          // background-color: #000;
         }
       }
     }
@@ -820,11 +753,11 @@ i {
   height: 30px;
   background-color: #fff;
 }
-// .marquee{
-//   width: 100%;
-//   height: 50px;
-//   line-height: 50px;
-// }
+.read-more{
+  cursor: pointer;
+  &:hover{
+  }
+}
 .c {
   color: #2d8cf0 !important;
 }
@@ -844,7 +777,6 @@ i {
 @media screen and (max-width: 600px) {
   .head{
     letter-spacing: 27px !important;
-    // display: none;
     height: 44px !important;
     font-size: 21px !important;
     line-height: 44px !important;
