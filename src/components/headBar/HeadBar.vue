@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class="tab-box oh">
     <Menu
-    enu
     mode="horizontal"
     :theme="theme_color"
     active-name="1"
@@ -44,9 +43,13 @@
       </span>
     </MenuItem>
   </Menu>
-  <div class="block">
-
-  </div>
+  <!-- <div class="block"></div> -->
+    <div class="tabbar flex-c-c oh">
+      <div class="content">
+            <!-- <h1 class="cfff fw500 mt30 fs35 ts3">展讯 <span class="fs14 vt3 ts">mrp</span></h1>
+            <p class="cfff fs14 fwl mt20 ts">愿你岁月无波澜，敬我余生不悲欢。</p> -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,7 +110,7 @@ export default {
       Cookie.remove("token");
       this.$store.dispatch("clearUserInfo");
       this.$router.push("/login");
-    },
+    }
   },
   beforeDestroy() {}
 };
@@ -116,8 +119,9 @@ export default {
 
 <style scoped lang='less'>
 .head-bar{
-  position: fixed;
+  // position: relative;
   width: 100%;
+  background-color: transparent;
 }
 .h1 {
   height: 46px;
@@ -181,4 +185,50 @@ export default {
 li{
   list-style: none;
 }
+.tabbar{
+  width: 100%;
+  height: 300px;
+  background: url('./../../../static/img/bg.jpg') no-repeat center top;
+  background-size: cover;
+  transform: translate(0, -130px);
+  .content{
+      width: 96%;
+      max-width: 1100px;
+      padding-top: 30px;
+      box-sizing: border-box;
+      .nav{
+          display: flex;
+          justify-content: flex-end;
+          .nav-item{
+              width: 98px;
+              height: 38px;
+              padding: 0 18;
+              text-align: center;
+              line-height: 38px;
+              cursor: pointer;
+              &:hover{
+                  box-shadow: 
+                      0 -1px 0 inset #fff,
+                      0 0 4px 1px inset rgba(100, 125, 151, 0.2);
+                      background-color: #BFD1E1;
+              }
+          }
+      }
+  }
+  }
+  .fw500{
+  font-weight: 500;
+  }
+  .ts3{
+  text-shadow: 2px 2px 0 rgba(100, 125, 151, 0.8);
+  }
+  .ts{
+  text-shadow: 1px 1px 0 rgba(100, 125, 151, 0.8);
+  }
+  .vt3{
+  vertical-align: -3px;
+  }
+  .tab-box{
+    height: 230px;
+  }
 </style>

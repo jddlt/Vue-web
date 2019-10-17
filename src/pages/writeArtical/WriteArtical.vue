@@ -2,15 +2,34 @@
   <div class="markdown">
     <Header></Header>
     <div class="title">
-      <Input v-model="artical.title" class="my-input" >
-          <span slot="prepend" class="fwb fs17 c999">文章标题</span>
+      <Input v-model="artical.title" class="my-input" placeholder="文章标题">
+          <!-- <span slot="prepend" class="fwb fs17 c999">文章标题</span> -->
+          <Select slot="prepend" v-model="type" size="small" style="width:100px" placeholder="类别">
+            <Option v-for="item in typeList" :value="item" :key="item">{{ item }}</Option>
+          </Select>
           <span slot="append"><Button type="info" @click="sendArtical">发帖</Button></span>
       </Input>
+      <div class="mt10 flec-c oh">
+        <Tooltip content="支持Markdown语法" class="mr20 vl10 ml20">
+            <i class="iconfont fs23">&#xe6eb;</i>
+        </Tooltip>
+        <RadioGroup v-model="personal" size='large' class="mt10">
+          <Radio label="personal" :disabled='isSkill'>
+              <i :class="'iconfont fs23 va-4' + (isSkill ? ' cccc' : ' d')">&#xe659;</i>
+              <!-- <span>原创</span> -->
+          </Radio>
+          <Radio label="public" :disabled='isSkill'>
+              <i :class="'iconfont fs23 va-4' + (isSkill ? ' cccc' : ' o')">&#xe601;</i>
+              <!-- <span>转载</span> -->
+          </Radio>
+      </RadioGroup>
+      </div>
     </div>
     <div class="w100 flex-cc mp30">
       <div class="container">
         <div class="mark-left" v-if='editArtical'>
-          <textarea class="textarea bs" v-model='artical.content' placeholder="支持markdown语法, 如: # title"></textarea>
+          <textarea class="textarea bs" v-model='artical.content' placeholder="文章内容 
+支持markdown语法, 如: # title"></textarea>
           <Button type="info" ghost size='small' class="preview" @click="showPreview(true)">预览</Button>
         </div>
         <!-- <div class="mark-right bs" ref='content'></div> -->
@@ -55,8 +74,21 @@ export default {
         content: ''
       },
       previewArtical: true,
-      editArtical: true
+      editArtical: true,
+      typeList: ['闲聊', 'Javascript', 'Vue', 'React', 'Webpack', 'Markdown', 'Jquery', 'Node', 'Python', 'Css', 'Git', '其他'],
+      type: '',
+      personal: 'personal',
+      isSkill: true
     };
+  },
+  watch: {
+    type(newVal, oldVal) {
+      if(newVal === '闲聊' || newVal === '其他') {
+        this.isSkill = true
+      } else {
+        this.isSkill = false
+      }
+    }
   },
   computed: {
     ...mapGetters(['userInfo'])
@@ -79,20 +111,45 @@ export default {
         this.$Message.info("内容不得少于15个字符");
         return;
       }
-      this.$post("/artical/sendArtical", {
-        title,
-        content,
-        author: JSON.stringify(this.userInfo)
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("发帖成功, 即将回到首页");
-          setTimeout(() => {
-            this.$router.go(-1)
-          }, 1800)
-          this.artical = { title: "", content: "" };
-          // this.getArticalList();
-        }
-      });
+      if(!this.type) {
+        this.$Message.info("请选择文章分类");
+        return;
+      }
+      if(this.type === '闲聊' || this.type === '其他') {
+        this.$post("/artical/sendArtical", {
+          title,
+          content,
+          author: JSON.stringify(this.userInfo),
+          type: this.type === '其他' ? '' : this.type,
+          personal: ''
+        }).then(res => {
+          if (res.code == 200) {
+            this.$Message.success("发帖成功, 即将回到首页");
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1800)
+            this.artical = { title: "", content: "" };
+            // this.getArticalList();
+          }
+        });
+      } else {
+         this.$post("/artical/sendArtical", {
+          title,
+          content,
+          author: JSON.stringify(this.userInfo),
+          type: this.type,
+          personal: this.personal
+        }).then(res => {
+          if (res.code == 200) {
+            this.$Message.success("发帖成功, 即将回到首页");
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1800)
+            this.artical = { title: "", content: "" };
+            // this.getArticalList();
+          }
+        });
+      }
     },
     showPreview(flag){
       this.previewArtical = flag
@@ -149,7 +206,7 @@ export default {
 <style scoped lang='less'>
 .title{
   width: 94%;
-  max-width: 1200px;
+  max-width: 1300px;
   min-width: 325px;
   margin: 0 auto;
   margin-top: 15px;
@@ -176,28 +233,32 @@ export default {
 }
 .container {
   width: 94%;
-  max-width: 1200px;
+  max-width: 1300px;
   min-width: 325px;
+  height: auto;
   display: flex;
   .mark-left{
     flex: 1;
     position: relative;
     .preview{
       position: absolute;
+      height: 100%;
       right: 10px;
       bottom: 10px;
     }
     .textarea{
       width: 100%;
-      height: calc(100vh - 210px);
+      height: 100%;
       background-color: #eee;
-      resize: none;
+      // resize: none;
+      min-height: 700px;
       font-size: 16px;
       font-weight: 200;
       border: none;
       outline: none;
       padding: 15px;
       padding-left: 18px;
+      box-sizing: border-box;
       &:active{
         border: none;
         outline: none;
@@ -207,7 +268,6 @@ export default {
   .mark-right{
     flex: 1;
     background-color: #fff;
-    height: calc(100vh - 210px);
     overflow: auto;
     padding: 15px;
     padding-left: 18px;
@@ -251,7 +311,15 @@ ul>li{
 ol>li{
   list-style: decimal;
 }
-
+.vl10{
+  vertical-align: -9px;
+}
+.d{
+  color: #D81E06;
+}
+.o{
+  color: #0099FF;
+}
 @media (max-width: 767px) {
     .markdown-body {
         padding: 15px;

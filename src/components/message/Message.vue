@@ -118,7 +118,6 @@ export default {
               '" style="vertical-align: middle"/>'
           );
         }
-        // console.log(str);
       }
       return str;
     },

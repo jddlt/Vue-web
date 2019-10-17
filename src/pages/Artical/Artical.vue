@@ -39,6 +39,17 @@
                   ghCompatibleHeaderId: true
                 }"
             ></VueShowdown>
+            <div class="flex mt30">
+              <div v-if="articalInfo.personal" class="mr30">
+                <span class="c000 fs16 mr10">性质: </span>
+                <i v-if="articalInfo.personal === 'personal'" class="iconfont fwl d fs23 va-3">&#xe659;</i>
+                <i v-if="articalInfo.personal === 'public'" class="iconfont fwl o fs23 va-3">&#xe601;</i>
+              </div>
+              <div v-if="articalInfo.type">
+                <span class="c000 fs15 mr10">类别: </span>
+                <router-link :to="'/?type=' + articalInfo.type" tag="a">{{articalInfo.type}}</router-link>
+              </div>
+            </div>
         </article>
           <Divider :dashed= true>全文完</Divider>
           <div class="message">

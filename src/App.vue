@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <transition name='fade'> -->
-      <router-view class="router"/>
+      <keep-alive include='Home'><router-view class="router"/></keep-alive>
     <!-- </transition> -->
     <Footer v-if="isShow"></Footer>
     <BackTop :bottom="75" class="op"></BackTop>
@@ -41,7 +41,8 @@ export default {
   height: 100%;
 }
 .router{
-  background: url("../static/img/bgc.jpg") repeat fixed left top;
+  /* background: url("../static/img/bgc.jpg") repeat fixed left top; */
+  background-color: #D8E2EB;
   min-height: calc(100vh - 54px);
 }
 .op{

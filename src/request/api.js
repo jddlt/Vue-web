@@ -2,7 +2,7 @@ import axios from 'axios';
 import router from './../router/index';
 import Cookie from 'js-cookie'
 import qs from 'qs'; //传给后台的数据为form格式
-import { Message } from 'iview'
+import { Message } from 'view-design'
 import 'iview/dist/styles/iview.css';
 
 

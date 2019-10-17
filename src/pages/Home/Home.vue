@@ -2,6 +2,11 @@
   <div class="home">
     <!-- <marquee align="absmiddle" behavior="scroll" bgcolor="#ccc" direction="left" height="50px" width="100%" style="margin-top: 100px">不得已, 回复删除啦 (ノへ￣、) </marquee> -->
     <HeadBar></HeadBar>
+
+    
+
+
+
     <div class="content fwb">
       <div class="left">
         <div class="info bs">
@@ -41,7 +46,7 @@
               分类
             </div>
             <div class="flex-c-cc mt10">
-              <a v-for='type in typeList' :key='type' class="flex-r-c aa">{{type.name}} ({{type.count}})</a>
+              <a v-for='type in typeList' :key='type.name' class="flex-r-c aa" @click='getArticalList(1, type.name)'>{{type.name}} ({{type.count}})</a>
             </div>
           </div>
         </div>
@@ -53,7 +58,7 @@
             <div class="list-head-left flex-sc" @click="showInfo(item.author)">
               <img :src="$crop(item.author.avatar, 35, 35, time)" alt class="list-img cp" />
               <div class="list-name flex-c-s">
-                <span class="fs14 c333 cp">{{item.author.name}}</span>
+                <span :class="'fs14 c333 cp' + (item.author.emil === '2216775643@qq.com' ? ' cm' : '')">{{item.author.name}}</span>
                 <span class="lh100">
                   <i class="iconfont fs11">&#xe629;</i>
                   <span class="c999 fs11 lh100">{{timesAgo(item.create_time)}}</span>
@@ -63,7 +68,10 @@
             <i :class="'list-like iconfont fs22 cccc flex-cc usn' + (((bigger == index) && (item.likes.includes(userInfo._id))) ? ' bigger-2' : '') + (item.likes.includes(userInfo._id) ? ' red' : '')" title='点赞' @click="iLike(item._id, index, item.likes)">&#xe61d;</i>
           </div>
           <div class="list-body" @click="articalDetail(item._id)">
-            <p class="list-title fs16 c000 fwb cp es1">{{item.title}}</p>
+            <p class="list-title fs16 c000 fwb cp es1">
+              <i v-if="item.personal === 'personal'" class="iconfont fwl d fs19 va-1">&#xe60d;</i><i v-if="item.personal === 'public'" class="iconfont fwl o fs19 va-1">&#xe700;</i>{{item.type && '['}}<span class="red fwl fs14">{{item.type}}</span>{{item.type && ']'}}
+              {{item.title}}
+            </p>
             <p class="list-content fs13 c666 fwl es2">{{item.content | compile}}</p>
           </div>
           <div class="list-foot flex-sc">
@@ -156,19 +164,19 @@ export default {
         title: "",
         content: ""
       },
-      replyContent: "",
       time: new Date().getTime(),
       articalSort: [],
       total: 0,
-      isOpen: false,
       showUserInfo: {},
       bigger: NaN,
       timer: 0,
       pageIndex: 1,
+      isOpen: false,
       times: 0,
       timeStart: null,
       loadStyle: 'loadMore',
-      scrollTimer: ''
+      scrollTimer: '',
+      activedType: ''
     };
   },
   computed: {
@@ -207,15 +215,17 @@ export default {
       });
     },
 
-    getArticalList(index = 1) {
+    getArticalList(index = 1, type='') {
       this.loadStyle = 'loading'
       this.$get("/artical", {
-        pageIndex: index
+        pageIndex: index,
+        type: type === '全部' ? '' : type
       }).then(res => {
         if (res.code == 200) {
           this.articalList = res.data;
           this.pageIndex = 1
-          this.loadStyle = 'loadMore'
+          this.loadStyle = res.data.length < 5 ? 'loadOver' : 'loadMore'
+          this.activedType = type === '全部' ? '' : type
         }
       });
     },
@@ -301,7 +311,6 @@ export default {
       window.onscroll = (e) => {
         this.scrollTimer && clearTimeout(this.scrollTimer)
         this.scrollTimer = setTimeout(() => {
-          console.log(1111);
           const bottom = e.target.scrollingElement.scrollHeight-e.target.scrollingElement.scrollTop-e.target.scrollingElement.offsetHeight
           // 距离底部0时加载一次
           if (bottom <= 300 && this.loadStyle == 'loadMore') {
@@ -310,7 +319,8 @@ export default {
             setTimeout(() => {
               this.pageIndex++
               this.$get("/artical", {
-                pageIndex: this.pageIndex
+                pageIndex: this.pageIndex,
+                type: this.activedType
               }).then(res => {
                 if (res.code == 200) {
                   this.articalList = this.articalList.concat(res.data);
@@ -328,7 +338,11 @@ export default {
     }
   },
   mounted() {
-    this.getArticalList();
+    if(this.$route.query.type) {
+      this.getArticalList(1, this.$route.query.type);
+    } else {
+      this.getArticalList();
+    }
     this.getArticalSort();
     this.getArticalTypeNum();
     this.scroll()
@@ -355,6 +369,7 @@ export default {
 .content {
   width: 100%;
   margin: 30px auto;
+  margin-top: 10px;
   margin-bottom: 0;
   display: flex;
   justify-content: center;
@@ -759,10 +774,10 @@ i {
   }
 }
 .c {
-  color: #2d8cf0 !important;
+  color: #59758B !important;
 }
 .bgc {
-  background-color: #2d8cf0;
+  background-color: #59758B;
 }
 @media screen and (max-width: 1236px) {
   .left {
@@ -796,6 +811,11 @@ i {
   }
   .bbt-box{
     padding: 0 18px !important;
+  }
+}
+.ht{
+  &:hover{
+    text-decoration: underline !important;
   }
 }
 </style>
