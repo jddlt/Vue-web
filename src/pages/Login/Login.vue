@@ -25,6 +25,7 @@
         <Tooltip content="忘记了就重新注册: )" class="mt10"><a href="#" v-if="way == '登陆'">忘记密码</a></Tooltip>
         <a href="#" class="item-bottom" @click="changeWay('注册')" v-if="way == '登陆'">还没有账号? 立即注册 <i class="iconfont">&#xe600;</i></a>
         <a href="#" class="item-bottom" @click="changeWay('登陆')" v-else>已有账号? 去登陆 <i class="iconfont">&#xe600;</i></a>
+        <router-link to='/' tag='a' class="back-home">返回首页 ></router-link>
       </div>
     </div>
   </div>
@@ -204,10 +205,18 @@ h3{
       }
       .item-bottom{
         position: absolute;
-        bottom: 30px;
+        bottom: 35px;
+      }
+      .back-home{
+        position: absolute;
+        bottom: 10px;
       }
     }
   }
+}
+input:focus:-webkit-autofill,
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #E6E6E6 inset !important;
 }
 input:-internal-autofill-selected /deep/ {
   background-color: #eee !important;

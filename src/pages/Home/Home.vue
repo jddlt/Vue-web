@@ -2,11 +2,6 @@
   <div class="home">
     <!-- <marquee align="absmiddle" behavior="scroll" bgcolor="#ccc" direction="left" height="50px" width="100%" style="margin-top: 100px">不得已, 回复删除啦 (ノへ￣、) </marquee> -->
     <HeadBar></HeadBar>
-
-    
-
-
-
     <div class="content fwb">
       <div class="left">
         <div class="info bs">
@@ -46,13 +41,18 @@
               分类
             </div>
             <div class="flex-c-cc mt10">
-              <a v-for='type in typeList' :key='type.name' class="flex-r-c aa" @click='getArticalList(1, type.name)'>{{type.name}} ({{type.count}})</a>
+              <a v-for='type in typeList' :key='type.name' :class="'flex-r-c aa' + (activedType === type.name ? ' c' : '')" @click='getArticalList(1, type.name)'>{{type.name}} ({{type.count}})</a>
             </div>
           </div>
         </div>
-      </div>
+      </div> 
       <div class="mid mb20">
-        <div class="head bs">今日话题</div>
+        <div class="head bs">
+          今日话题 
+          <Select  size="large" v-model="activedType" style="width:140px" class="sel" placeholder='分类' @on-change="getArticalList(1, activedType)">
+            <Option v-for="item in typeList" :value="item.name" :key="item.name">{{ item.name + '(' + item.count + ')' }}</Option>
+          </Select>
+        </div>
         <div class="list bs" v-for="(item, index) in (articalList ? articalList : 5)" :key="item._id">
           <div class="list-head flex-sc">
             <div class="list-head-left flex-sc" @click="showInfo(item.author)">
@@ -117,6 +117,10 @@
               placeholder="请输入您的内容"
               v-model.trim="artical.content"
             ></textarea>
+            <div>
+              <i class="iconfont f fwl fs14 ml5">&#xe636;</i>
+              此处发帖默认为[闲聊]分类
+            </div>
             <!-- <input type="textarea" class="textarea" placeholder="请输入您的内容"> -->
             <div class="btn fs16 cfff flex-cc fwn" @click="sendArtical">发布</div>
           </div>
@@ -205,7 +209,9 @@ export default {
       this.$post("/artical/sendArtical", {
         title,
         content,
-        author: JSON.stringify(this.userInfo)
+        author: JSON.stringify(this.userInfo),
+        type: '闲聊',
+        personal: ''
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("发帖成功");
@@ -356,6 +362,9 @@ export default {
 .home {
   width: 100%;
   padding-bottom: 1px;
+}
+.sel{
+  display: none;
 }
 .ivu-menu-primary {
   box-shadow: 0 0 5px #666;
@@ -791,11 +800,18 @@ i {
 }
 @media screen and (max-width: 600px) {
   .head{
-    letter-spacing: 27px !important;
+    letter-spacing: 7px !important;
     height: 44px !important;
     font-size: 21px !important;
     line-height: 44px !important;
     margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .sel{
+      letter-spacing: 0px !important;
+      display: inline-block;
+    }
   }
   .content{
     margin-top: 0px;
@@ -812,6 +828,9 @@ i {
   .bbt-box{
     padding: 0 18px !important;
   }
+}
+.f{
+  color: #FEAF0D;
 }
 .ht{
   &:hover{

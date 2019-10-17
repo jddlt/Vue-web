@@ -207,10 +207,7 @@ li{
               line-height: 38px;
               cursor: pointer;
               &:hover{
-                  box-shadow: 
-                      0 -1px 0 inset #fff,
-                      0 0 4px 1px inset rgba(100, 125, 151, 0.2);
-                      background-color: #BFD1E1;
+                
               }
           }
       }
@@ -231,4 +228,17 @@ li{
   .tab-box{
     height: 230px;
   }
+@media screen and (max-width: 600px) {
+  .tabbar{
+    display: none;
+  }
+  .tab-box{
+    height: 60px;
+  }
+  .head-bar{
+    position: fixed;
+    background: url('./../../../static/img/bg_s.jpg') no-repeat center top;
+    background-size: cover;
+  }
+}
 </style>

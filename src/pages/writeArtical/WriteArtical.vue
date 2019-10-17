@@ -214,6 +214,7 @@ export default {
     font-size: 16px;
     font-weight: 600;
     text-indent: 0.4em;
+    overflow: hidden;
   }
   .my-input /deep/ button{
     background-color: #2d8cf0;
@@ -231,6 +232,9 @@ export default {
     height: 100;
   }
 }
+.send-btn{
+  height: 40px;
+}
 .container {
   width: 94%;
   max-width: 1300px;
@@ -242,7 +246,6 @@ export default {
     position: relative;
     .preview{
       position: absolute;
-      height: 100%;
       right: 10px;
       bottom: 10px;
     }
@@ -250,8 +253,8 @@ export default {
       width: 100%;
       height: 100%;
       background-color: #eee;
-      // resize: none;
-      min-height: 700px;
+      resize: none;
+      height: calc(100vh - 210px);
       font-size: 16px;
       font-weight: 200;
       border: none;
@@ -268,6 +271,7 @@ export default {
   .mark-right{
     flex: 1;
     background-color: #fff;
+    height: calc(100vh - 210px);
     overflow: auto;
     padding: 15px;
     padding-left: 18px;
@@ -276,7 +280,7 @@ export default {
     .preview{
       position: fixed;
       right: calc(3vw + 10px);
-      bottom: 94px;
+      bottom: 50px;
     }
   }
 }
