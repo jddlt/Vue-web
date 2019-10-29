@@ -75,7 +75,7 @@ export default {
       },
       previewArtical: true,
       editArtical: true,
-      typeList: ['闲聊', 'Javascript', 'Vue', 'React', 'Webpack', 'Markdown', 'Jquery', 'Node', 'Python', 'Css', 'Git', '其他'],
+      typeList: ['闲聊', 'Javascript', 'Vue', 'React', 'Webpack', 'TypeScript', 'Markdown', 'Jquery', 'Node', 'Python', 'Css', 'Git', '其他'],
       type: '',
       personal: 'personal',
       isSkill: true
