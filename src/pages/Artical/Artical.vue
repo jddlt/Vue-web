@@ -52,7 +52,7 @@
             </div>
         </article>
           <Divider :dashed= true>全文完</Divider>
-          <div class="message">
+          <div class="message r">
             <Message :talkList='talkList' :id='id'></Message>
           </div>
       </div>
