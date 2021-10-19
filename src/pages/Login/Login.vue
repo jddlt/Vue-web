@@ -40,7 +40,8 @@ export default {
       way: '登陆',
       emil: '', 
       password: '',
-      name: ''
+      name: '',
+      unUseData: ''
     };
   },
   methods: {
