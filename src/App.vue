@@ -10,6 +10,8 @@
 
 // c_1
 
+// c_2
+
 <script>
 import Footer from '@/components/footer/Footer'
 export default {
