@@ -8,6 +8,8 @@
   </div>
 </template>
 
+// c_1
+
 <script>
 import Footer from '@/components/footer/Footer'
 export default {
