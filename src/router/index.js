@@ -11,6 +11,8 @@ const array = []
  
 Vue.use(Router)
 
+console.log(array.length)
+
 // 解决那啥的报错
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
