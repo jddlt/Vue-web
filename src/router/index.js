@@ -6,6 +6,8 @@ import Artical from '@/pages/Artical/Artical'
 import UserInfo from '@/pages/UserInfo/UserInfo'
 import WriteArtical from '@/pages/writeArtical/WriteArtical'
 // import Upload from '@/components/upload/Upload'
+
+const array = []
  
 Vue.use(Router)
 
