@@ -7,7 +7,7 @@ import UserInfo from '@/pages/UserInfo/UserInfo'
 import WriteArtical from '@/pages/writeArtical/WriteArtical'
 // import Upload from '@/components/upload/Upload'
 
-const array = []
+const array = ['1']
  
 Vue.use(Router)
 
