@@ -7,6 +7,8 @@ import UserInfo from '@/pages/UserInfo/UserInfo'
 import WriteArtical from '@/pages/writeArtical/WriteArtical'
 // import Upload from '@/components/upload/Upload'
  
+const arr = ['master']
+
 Vue.use(Router)
 
 // 解决那啥的报错
