@@ -58,6 +58,7 @@ export default new Router({
     if (savePosition) {
       return 1 + savePosition 
     }
+    // 我是冲突吗~
     // 否则直接回到顶部
     return {x: 0, z: 0, y: 0}
    },
