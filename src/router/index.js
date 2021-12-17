@@ -6,10 +6,14 @@ import Artical from '@/pages/Artical/Artical'
 import UserInfo from '@/pages/UserInfo/UserInfo'
 import WriteArtical from '@/pages/writeArtical/WriteArtical'
 // import Upload from '@/components/upload/Upload'
+
+const array = ['1']
  
 const arr = ['master']
 
 Vue.use(Router)
+
+console.log(array.length)
 
 // 解决那啥的报错
 const originalPush = Router.prototype.push
@@ -56,9 +60,10 @@ export default new Router({
   scrollBehavior: (to, from, savePosition) => {
     // 如果savePosition存在，则直接滚动到相应位置
     if (savePosition) {
-      return savePosition + 2
+      return 1 + savePosition 
     }
+    // 我是冲突吗~
     // 否则直接回到顶部
-    return {d: 3, x: 0, y: 0}
+    return {x: 0, z: 0, y: 0}
    },
 })
