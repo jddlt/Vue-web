@@ -56,9 +56,9 @@ export default new Router({
   scrollBehavior: (to, from, savePosition) => {
     // 如果savePosition存在，则直接滚动到相应位置
     if (savePosition) {
-      return savePosition 
+      return 1 + savePosition 
     }
     // 否则直接回到顶部
-    return {x: 0, y: 0}
+    return {x: 0, z: 0, y: 0}
    },
 })
