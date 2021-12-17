@@ -17,6 +17,8 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+console.log('array')
+
 
 export default new Router({
   mode: 'history',
